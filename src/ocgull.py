@@ -1,0 +1,58 @@
+from __future__ import print_function
+from googleapiclient import discovery
+from httplib2 import Http
+from oauth2client import file, client, tools
+
+
+class OcGull():
+    # If modifying these scopes, delete the file token.json.
+    SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+
+    # The ID and range of the interested spreadsheet.
+    SPREADSHEET_ID = '1v4upQF2OknO9jHAPCvcawW86H5a1KRnc-dWfLHT0jZY'
+
+    def do(self):
+        """and create notification
+        when there are interesting changes."""
+
+        protected_sheet_ids = self.fetch_protected_sheet_ids()
+
+    def fetch_protected_sheet_ids(self):
+        """Fetch latest data from the OC signup spreadsheet         """
+
+        # Read from a stored file that contains the protected_range_sheets ids.
+        # Get current protected_range_sheets
+        # if set(protected_range_sheets) - set(old_protected_range_sheets)
+        #  write a new protected_range_sheets file
+        #  create a notification
+        # exit
+        service = self._get_spreadsheet_service()
+        spreadsheet = service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
+        sheets = spreadsheet.get('sheets', [])
+        protected_sheet_ids = [
+            sheet['properties']['sheetId']
+            for sheet in sheets
+            if sheet.get('protectedRanges')
+        ]
+
+        print(protected_sheet_ids)
+        return protected_sheet_ids
+
+        # sheet['protectedRanges']
+        # [{'protectedRangeId': 639046925, 'range': {'sheetId': 1333024752}}]
+
+    def _get_spreadsheet_service(self):
+        store = file.Storage('token.json')
+        creds = store.get()
+        if not creds or creds.invalid:
+            flow = client.flow_from_clientsecrets('credentials.json', self.SCOPES)
+            creds = tools.run_flow(flow, store)
+
+        service = discovery.build('sheets', 'v4', http=creds.authorize(Http()))
+
+        return service
+
+
+if __name__ == '__main__':
+    gull = OcGull()
+    gull.pull()
