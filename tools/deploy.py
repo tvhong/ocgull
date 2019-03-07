@@ -11,7 +11,7 @@ def build():
     print("Building zip...")
     function_zip_file = path.join(BUILD_DIR, 'function.zip')
     ocgull_file = path.join(SRC_DIR, 'ocgull.py')
-    subprocess.run(['zip', '-r', function_zip_file, ocgull_file])
+    subprocess.run(['zip', '-j', '-r', function_zip_file, ocgull_file])
 
 def deploy():
     print("Deploying to AWS lambda...")
