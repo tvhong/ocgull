@@ -6,5 +6,5 @@ TODO
 # Deployment
 From the project's directory, run:
 ```
-python tools/deploy.py
+python infra/deploy.py
 ```
