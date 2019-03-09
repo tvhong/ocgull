@@ -1,12 +1,10 @@
 import subprocess
 from os import path
 
-
 CURRENT_DIR = path.dirname(path.realpath(__file__))
 PROJECT_ROOT = path.normpath(path.join(CURRENT_DIR, '../'))
 BUILD_DIR = path.join(PROJECT_ROOT, 'build/')
 SRC_DIR = path.join(PROJECT_ROOT, 'src/')
-SECRETS_DIR = path.join(PROJECT_ROOT, 'secrets/')
 PACKAGE_DIR = path.join(BUILD_DIR, 'package/')
 
 def run_command(params, **kwargs):
@@ -26,8 +24,6 @@ def build():
 
     print("Adding src to zip...")
     run_command(['zip', '-g', '-r', function_zip_file, '.', '-i', '*.py'], cwd=SRC_DIR)
-    print("Adding secrets to zip...")
-    run_command(['zip', '-g', '-r', function_zip_file, '.'], cwd=SECRETS_DIR)
 
 def deploy():
     print("Deploying to AWS lambda...")

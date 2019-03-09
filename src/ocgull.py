@@ -1,17 +1,9 @@
-from googleapiclient import discovery
-from httplib2 import Http
-from oauth2client import file, client, tools
-from os import path
 import json
+import os
+import sys
 
+from googleapiclient import discovery
 
-def handleLambdaEvent(event, context):
-    gull = OcGull('./')
-    protected_sheet_ids = gull.pull()
-    return {
-        'statusCode': 200,
-        'body': json.dumps(protected_sheet_ids)
-    }
 
 class OcGull():
     # If modifying these scopes, delete the file token.json.
@@ -20,8 +12,8 @@ class OcGull():
     # The ID and range of the interested spreadsheet.
     SPREADSHEET_ID = '1v4upQF2OknO9jHAPCvcawW86H5a1KRnc-dWfLHT0jZY'
 
-    def __init__(self, secrets_path):
-        self.secrets_path = secrets_path
+    def __init__(self, api_key):
+        self.api_key = api_key
 
     def pull(self):
         """and create notification
@@ -54,15 +46,20 @@ class OcGull():
         # [{'protectedRangeId': 639046925, 'range': {'sheetId': 1333024752}}]
 
     def _get_spreadsheet_service(self):
-        store = file.Storage(path.join(self.secrets_path, 'token.json'))
-        creds = store.get()
-        if not creds or creds.invalid:
-            flow = client.flow_from_clientsecrets(
-                path.join(self.secrets_path, 'credentials.json'),
-                self.SCOPES
-            )
-            creds = tools.run_flow(flow, store)
-
-        service = discovery.build('sheets', 'v4', http=creds.authorize(Http()))
+        service = discovery.build('sheets', 'v4', developerKey=self.api_key)
 
         return service
+
+def handleLambdaEvent(event, context):
+    api_key = os.environ.get('GCP_API_KEY')
+    gull = OcGull(api_key)
+    protected_sheet_ids = gull.pull()
+    return {
+        'statusCode': 200,
+        'body': json.dumps(protected_sheet_ids)
+    }
+
+if __name__ == '__main__':
+    api_key = sys.argv[1]
+    gull = OcGull(api_key)
+    print(gull.pull())
