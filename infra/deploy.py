@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from os import path
 
 CURRENT_DIR = path.dirname(path.realpath(__file__))
@@ -14,9 +15,10 @@ def run_command(params, **kwargs):
 
     subprocess.run(params, **kwargs)
 
-def build():
-    # print("Downloading packages...")
-    # run_command(['pip', 'install', '-r', 'requirements.txt', '--target', PACKAGE_DIR])
+def build(pip_download):
+    if pip_download:
+        print("Downloading packages...")
+        run_command(['pip', 'install', '-q', '-r', 'requirements.txt', '--target', PACKAGE_DIR])
 
     function_zip_file = path.join(BUILD_DIR, 'function.zip')
     print("Adding package to zip...")
@@ -33,5 +35,6 @@ def deploy():
 
 
 if __name__ == '__main__':
-    build()
+    pip_download = True if '-pip' in sys.argv else False
+    build(pip_download)
     deploy()
