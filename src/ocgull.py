@@ -33,7 +33,10 @@ class OcGull():
         """and create notification
         when there are interesting changes."""
 
-        return self._fetch_sheets()
+        sheets = self._fetch_sheets()
+        protected_sheets = [sheet for sheet in sheets if sheet.protected]
+
+        return protected_sheets
 
     def _build_spreadsheet_service(self, api_key):
         return discovery.build('sheets', 'v4', developerKey=api_key)
@@ -49,7 +52,7 @@ class OcGull():
         #  create a notification
         # exit
         spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
-        sheets = [
+        return [
             Sheet(
                 sheet['properties']['sheetId'],
                 sheet['properties']['title'],
@@ -57,15 +60,6 @@ class OcGull():
             )
             for sheet in spreadsheet.get('sheets', [])
         ]
-        protected_sheets = [sheet for sheet in sheets if sheet.protected]
-
-        return protected_sheets
-
-        # sheet['protectedRanges']
-        # [{'protectedRangeId': 639046925, 'range': {'sheetId': 1333024752}}]
-
-
-        return service
 
 def handleLambdaEvent(event, context):
     api_key = os.environ.get('GCP_API_KEY')
