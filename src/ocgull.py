@@ -28,7 +28,7 @@ class OcGull():
 
     def __init__(self, api_key):
         self.api_key = api_key
-        self.service = self._get_spreadsheet_service()
+        self.service = self._build_spreadsheet_service()
 
     def pull(self):
         """and create notification
@@ -62,7 +62,7 @@ class OcGull():
         # sheet['protectedRanges']
         # [{'protectedRangeId': 639046925, 'range': {'sheetId': 1333024752}}]
 
-    def _get_spreadsheet_service(self):
+    def _build_spreadsheet_service(self):
         service = discovery.build('sheets', 'v4', developerKey=self.api_key)
 
         return service
