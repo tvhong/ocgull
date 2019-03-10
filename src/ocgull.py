@@ -35,6 +35,9 @@ class OcGull():
 
         return self._fetch_sheets()
 
+    def _build_spreadsheet_service(self, api_key):
+        return discovery.build('sheets', 'v4', developerKey=api_key)
+
     def _fetch_sheets(self):
         """Fetch latest data from the OC signup spreadsheet."""
 
@@ -61,8 +64,6 @@ class OcGull():
         # sheet['protectedRanges']
         # [{'protectedRangeId': 639046925, 'range': {'sheetId': 1333024752}}]
 
-    def _build_spreadsheet_service(self, api_key):
-        return discovery.build('sheets', 'v4', developerKey=api_key)
 
         return service
 
