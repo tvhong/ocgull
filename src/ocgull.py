@@ -1,11 +1,27 @@
 import json
 import os
 import sys
-from collections import namedtuple
 
 from googleapiclient import discovery
 
-Sheet = namedtuple('Sheet', ['id', 'title', 'protected'])
+
+class Sheet():
+    def __init__(self, id, title, protected):
+        self.id = id
+        self.title = title
+        self.protected = protected
+
+    def __eq__(self, other):
+        return self.id == other.id
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __str__(self):
+        return str(self.id)
+
+    def __repr__(self):
+        return str(self)
 
 class OcGull():
     SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
