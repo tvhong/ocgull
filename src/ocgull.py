@@ -77,16 +77,21 @@ class OcGull():
         """and create notification
         when there are interesting changes."""
 
-        sheets = self._fetch_sheets()
-        protected_sheets = [sheet for sheet in sheets if sheet.protected]
-        prev_protected_sheets = self._get_prev_protected_sheets()
-        unlocked_sheets = set(prev_protected_sheets) - set(protected_sheets)
-        unlocked_sheets = unlocked_sheets.intersection(sheets)
-
-        return unlocked_sheets
+        return self._get_unlocked_sheets()
 
     def _build_spreadsheet_service(self, api_key):
         return discovery.build('sheets', 'v4', developerKey=api_key)
+
+    def _get_unlocked_sheets(self):
+        prev_protected_sheets = self._get_prev_protected_sheets()
+
+        sheets = self._fetch_sheets()
+        protected_sheets = [sheet for sheet in sheets if sheet.protected]
+
+        unlocked_sheets = set(prev_protected_sheets) - set(protected_sheets)
+        unlocked_sheets = unlocked_sheets.intersection(sheets)
+
+        return list(unlocked_sheets)
 
     def _fetch_sheets(self):
         """Fetch latest data from the OC signup spreadsheet."""
