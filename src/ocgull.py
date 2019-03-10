@@ -83,13 +83,12 @@ class OcGull():
         return discovery.build('sheets', 'v4', developerKey=api_key)
 
     def _get_unlocked_sheets(self):
-        prev_protected_sheets = self._get_prev_protected_sheets()
+        sheets = set(self._fetch_sheets())
+        prev_protected_sheets = set(self._get_prev_protected_sheets())
+        prev_protected_sheets = prev_protected_sheets & sheets
+        protected_sheets = set(sheet for sheet in sheets if sheet.protected)
 
-        sheets = self._fetch_sheets()
-        protected_sheets = [sheet for sheet in sheets if sheet.protected]
-
-        unlocked_sheets = set(prev_protected_sheets) - set(protected_sheets)
-        unlocked_sheets = unlocked_sheets.intersection(sheets)
+        unlocked_sheets = prev_protected_sheets - protected_sheets
 
         return list(unlocked_sheets)
 
