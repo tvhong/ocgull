@@ -6,7 +6,7 @@ from googleapiclient import discovery
 
 
 class Sheet():
-    def __init__(self, id, title, protected):
+    def __init__(self, id, title, protected=False):
         self.id = id
         self.title = title
         self.protected = protected
