@@ -6,6 +6,10 @@ from googleapiclient import discovery
 
 
 class Sheet():
+    """
+    Data structure represents a Sheet.
+    """
+
     def __init__(self, id, title, protected=False):
         self.id = id
         self.title = title
@@ -26,14 +30,18 @@ class Sheet():
     def __repr__(self):
         return str(self)
 
+
 class OcGull():
+    """
+    Core logic for the notification service.
+    """
+
     def __init__(self, sheets_repo, prev_sheets_repo):
         self.sheets_repo = sheets_repo
         self.prev_sheets_repo = prev_sheets_repo
 
     def pull(self):
-        """and create notification
-        when there are interesting changes."""
+        """Find the unlocked sheets and create notification when there's one."""
 
         return self._get_unlocked_sheets()
 
