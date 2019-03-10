@@ -79,22 +79,17 @@ class OcGull():
 
         sheets = self._fetch_sheets()
         protected_sheets = [sheet for sheet in sheets if sheet.protected]
+        prev_protected_sheets = self._get_prev_protected_sheets()
+        unlocked_sheets = set(prev_protected_sheets) - set(protected_sheets)
+        unlocked_sheets = unlocked_sheets.intersection(sheets)
 
-        return protected_sheets
+        return unlocked_sheets
 
     def _build_spreadsheet_service(self, api_key):
         return discovery.build('sheets', 'v4', developerKey=api_key)
 
     def _fetch_sheets(self):
         """Fetch latest data from the OC signup spreadsheet."""
-
-        # Read from a stored file that contains the protected_sheets ids.
-        # Get current protected_sheets
-        # unlocked_sheets = (set(prev_protected_sheets) - set(protected_sheets)).intersect(all_sheets)
-        # if set(protected_sheets) - set(prev_protected_sheets)
-        #  write a new protected_sheets file
-        #  create a notification
-        # exit
         spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
         return [
             Sheet(
