@@ -6,11 +6,7 @@ from googleapiclient import discovery
 
 
 class OcGull():
-    # If modifying these scopes, delete the file token.json.
-    SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
-
-    # The ID and range of the interested spreadsheet.
-    SPREADSHEET_ID = '1v4upQF2OknO9jHAPCvcawW86H5a1KRnc-dWfLHT0jZY'
+    SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
 
     def __init__(self, api_key):
         self.api_key = api_key
