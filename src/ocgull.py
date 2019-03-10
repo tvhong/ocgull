@@ -33,9 +33,9 @@ class OcGull():
         """and create notification
         when there are interesting changes."""
 
-        return self.fetch_protected_sheet_ids()
+        return self._fetch_sheets()
 
-    def fetch_protected_sheet_ids(self):
+    def _fetch_sheets(self):
         """Fetch latest data from the OC signup spreadsheet."""
 
         # Read from a stored file that contains the protected_sheets ids.
