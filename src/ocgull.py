@@ -62,7 +62,7 @@ class OcGull():
         # [{'protectedRangeId': 639046925, 'range': {'sheetId': 1333024752}}]
 
     def _build_spreadsheet_service(self, api_key):
-        service = discovery.build('sheets', 'v4', developerKey=api_key)
+        return discovery.build('sheets', 'v4', developerKey=api_key)
 
         return service
 
