@@ -28,6 +28,7 @@ class OcGull():
 
     def __init__(self, api_key):
         self.api_key = api_key
+        self.service = self._get_spreadsheet_service()
 
     def pull(self):
         """and create notification
@@ -45,8 +46,7 @@ class OcGull():
         #  write a new protected_sheets file
         #  create a notification
         # exit
-        service = self._get_spreadsheet_service()
-        spreadsheet = service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
+        spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
         sheets = [
             Sheet(
                 sheet['properties']['sheetId'],
