@@ -5,7 +5,7 @@ from collections import namedtuple
 
 from googleapiclient import discovery
 
-Sheet = namedtuple('Sheet', ['id', 'title'])
+Sheet = namedtuple('Sheet', ['id', 'title', 'protected'])
 
 class OcGull():
     SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
@@ -24,18 +24,22 @@ class OcGull():
 
         # Read from a stored file that contains the protected_sheets ids.
         # Get current protected_sheets
-        # unlocked_sheets = (set(prev_protected_sheets) - set(protected_sheets)).intersect()
+        # unlocked_sheets = (set(prev_protected_sheets) - set(protected_sheets)).intersect(all_sheets)
         # if set(protected_sheets) - set(prev_protected_sheets)
         #  write a new protected_sheets file
         #  create a notification
         # exit
         service = self._get_spreadsheet_service()
         spreadsheet = service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
-        protected_sheets = [
-            Sheet(sheet['properties']['sheetId'], sheet['properties']['title'])
+        sheets = [
+            Sheet(
+                sheet['properties']['sheetId'],
+                sheet['properties']['title'],
+                bool(sheet.get('protectedRanges')),
+            )
             for sheet in spreadsheet.get('sheets', [])
-            if sheet.get('protectedRanges')
         ]
+        protected_sheets = [sheet for sheet in sheets if sheet.protected]
 
         return protected_sheets
 
