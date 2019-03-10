@@ -11,8 +11,11 @@ class Sheet():
         self.title = title
         self.protected = protected
 
+    def __hash__(self):
+        return self.id
+
     def __eq__(self, other):
-        return self.id == other.id
+        return hash(self) == hash(other)
 
     def __ne__(self, other):
         return not self == other
