@@ -27,7 +27,6 @@ class Sheet():
         return str(self)
 
 class OcGull():
-    SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
     PREV_PROTECTED_SHEETS = [
         Sheet(id=589148432123, title='BOOM!', protected=True),
         Sheet(id=589148479, title='OC1 Usage Rules', protected=True),
@@ -70,8 +69,8 @@ class OcGull():
         Sheet(id=1891545419, title='MAR 17 - MAR 23', protected=True)
     ]
 
-    def __init__(self, api_key):
-        self.service = self._build_spreadsheet_service(api_key)
+    def __init__(self, sheets_repo):
+        self.sheets_repo = sheets_repo
 
     def pull(self):
         """and create notification
@@ -79,11 +78,8 @@ class OcGull():
 
         return self._get_unlocked_sheets()
 
-    def _build_spreadsheet_service(self, api_key):
-        return discovery.build('sheets', 'v4', developerKey=api_key)
-
     def _get_unlocked_sheets(self):
-        sheets = set(self._fetch_sheets())
+        sheets = set(self.sheets_repo.fetch())
         prev_protected_sheets = set(self._get_prev_protected_sheets())
         prev_protected_sheets = prev_protected_sheets & sheets
         protected_sheets = set(sheet for sheet in sheets if sheet.protected)
@@ -92,8 +88,22 @@ class OcGull():
 
         return list(unlocked_sheets)
 
-    def _fetch_sheets(self):
-        """Fetch latest data from the OC signup spreadsheet."""
+    def _get_prev_protected_sheets(self):
+        return self.PREV_PROTECTED_SHEETS
+
+
+class SheetsRepo():
+    """
+    Class to interact with Google sheets API.
+    """
+
+    SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
+
+    def __init__(self, api_key):
+        self.service = self._build_spreadsheet_service(api_key)
+
+    def fetch(self):
+        """Fetch latest sheet data from the OC signup spreadsheet."""
         spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
         return [
             Sheet(
@@ -104,12 +114,14 @@ class OcGull():
             for sheet in spreadsheet.get('sheets', [])
         ]
 
-    def _get_prev_protected_sheets(self):
-        return self.PREV_PROTECTED_SHEETS
+    def _build_spreadsheet_service(self, api_key):
+        return discovery.build('sheets', 'v4', developerKey=api_key)
+
 
 def handleLambdaEvent(event, context):
     api_key = os.environ.get('GCP_API_KEY')
-    gull = OcGull(api_key)
+    sheets_repo = SheetsRepo(api_key)
+    gull = OcGull(sheets_repo)
     return {
         'statusCode': 200,
         'body': json.dumps(gull.pull())
@@ -117,5 +129,6 @@ def handleLambdaEvent(event, context):
 
 if __name__ == '__main__':
     api_key = sys.argv[1]
-    gull = OcGull(api_key)
+    sheets_repo = SheetsRepo(api_key)
+    gull = OcGull(sheets_repo)
     print(gull.pull())
