@@ -1,21 +1,18 @@
 from unittest import TestCase
 
-from mock import Mock, patch
+from mock import Mock
 
 from ocgull import OcGull, Sheet
 
 
-@patch('ocgull.OcGull._get_prev_protected_sheets')
 class TestOcGull(TestCase):
     def setUp(self):
         self.sheets_repo = Mock()
-        self.gull = OcGull(self.sheets_repo)
+        self.prev_sheets_repo = Mock()
+        self.gull = OcGull(self.sheets_repo, self.prev_sheets_repo)
 
-    def test_getUnlockedSheets_oneSheetUnlocked_returnSheet(
-        self,
-        stub_get_prev_protected_sheets,
-    ):
-        stub_get_prev_protected_sheets.return_value = [
+    def test_getUnlockedSheets_oneSheetUnlocked_returnSheet(self):
+        self.prev_sheets_repo.fetch_protected_sheets.return_value = [
             Sheet(1, "Sheet 1", protected=True),
             Sheet(2, "Sheet 2", protected=True),
         ]
@@ -28,11 +25,8 @@ class TestOcGull(TestCase):
 
         self.assertListEqual([Sheet(1, "Sheet 1")], unlocked_sheets)
 
-    def test_getUnlockedSheets_multipleSheetsUnlocked_returnSheets(
-        self,
-        stub_get_prev_protected_sheets,
-    ):
-        stub_get_prev_protected_sheets.return_value = [
+    def test_getUnlockedSheets_multipleSheetsUnlocked_returnSheets(self):
+        self.prev_sheets_repo.fetch_protected_sheets.return_value = [
             Sheet(1, "Sheet 1", protected=True),
             Sheet(2, "Sheet 2", protected=True),
             Sheet(3, "Sheet 3", protected=True),
@@ -49,11 +43,8 @@ class TestOcGull(TestCase):
                 [Sheet(1, "Sheet 1"), Sheet(2, "Sheet 2")],
                 unlocked_sheets)
 
-    def test_getUnlockedSheets_noSheetsUnlocked_returnEmptyList(
-        self,
-        stub_get_prev_protected_sheets,
-    ):
-        stub_get_prev_protected_sheets.return_value = [
+    def test_getUnlockedSheets_noSheetsUnlocked_returnEmptyList(self):
+        self.prev_sheets_repo.fetch_protected_sheets.return_value = [
             Sheet(1, "Sheet 1", protected=True),
             Sheet(2, "Sheet 2", protected=True),
         ]
@@ -66,11 +57,8 @@ class TestOcGull(TestCase):
 
         self.assertListEqual([], unlocked_sheets)
 
-    def test_getUnlockedSheets_noPrevProtectedSheets_returnEmptyList(
-        self,
-        stub_get_prev_protected_sheets,
-    ):
-        stub_get_prev_protected_sheets.return_value = []
+    def test_getUnlockedSheets_noPrevProtectedSheets_returnEmptyList(self):
+        self.prev_sheets_repo.fetch_protected_sheets.return_value = []
         self.sheets_repo.fetch.return_value = [
             Sheet(1, "Sheet 1", protected=True),
             Sheet(2, "Sheet 2", protected=True),
@@ -80,11 +68,8 @@ class TestOcGull(TestCase):
 
         self.assertListEqual([], unlocked_sheets)
 
-    def test_getUnlockedSheets_noNewProtectedSheets_returnAllPrevSheets(
-        self,
-        stub_get_prev_protected_sheets,
-    ):
-        stub_get_prev_protected_sheets.return_value = [
+    def test_getUnlockedSheets_noNewProtectedSheets_returnAllPrevSheets(self):
+        self.prev_sheets_repo.fetch_protected_sheets.return_value = [
             Sheet(1, "Sheet 1", protected=True),
             Sheet(2, "Sheet 2", protected=True),
         ]
@@ -100,11 +85,8 @@ class TestOcGull(TestCase):
                 [Sheet(1, "Sheet 1"), Sheet(2, "Sheet 2")],
                 unlocked_sheets)
 
-    def test_getUnlockedSheets_prevSheetsNotThereAnyMore_ignoreSheet(
-        self,
-        stub_get_prev_protected_sheets,
-    ):
-        stub_get_prev_protected_sheets.return_value = [
+    def test_getUnlockedSheets_prevSheetsNotThereAnyMore_ignoreSheet(self):
+        self.prev_sheets_repo.fetch_protected_sheets.return_value = [
             Sheet(1, "Sheet 1", protected=True),
             Sheet(2, "Sheet 2", protected=True),
         ]
@@ -116,11 +98,8 @@ class TestOcGull(TestCase):
 
         self.assertListEqual([Sheet(2, "Sheet 2")], unlocked_sheets)
 
-    def test_getUnlockedSheets_failedFetchingSheets_bubbleError(
-        self,
-        stub_get_prev_protected_sheets,
-    ):
-        stub_get_prev_protected_sheets.return_value = [
+    def test_getUnlockedSheets_failedFetchingSheets_bubbleError(self):
+        self.prev_sheets_repo.fetch_protected_sheets.return_value = [
             Sheet(1, "Sheet 1", protected=True),
             Sheet(2, "Sheet 2", protected=True),
         ]

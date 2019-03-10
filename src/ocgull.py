@@ -27,6 +27,58 @@ class Sheet():
         return str(self)
 
 class OcGull():
+    def __init__(self, sheets_repo, prev_sheets_repo):
+        self.sheets_repo = sheets_repo
+        self.prev_sheets_repo = prev_sheets_repo
+
+    def pull(self):
+        """and create notification
+        when there are interesting changes."""
+
+        return self._get_unlocked_sheets()
+
+    def _get_unlocked_sheets(self):
+        sheets = set(self.sheets_repo.fetch())
+        prev_protected_sheets = set(self.prev_sheets_repo.fetch_protected_sheets())
+        prev_protected_sheets = prev_protected_sheets & sheets
+        protected_sheets = set(sheet for sheet in sheets if sheet.protected)
+
+        unlocked_sheets = prev_protected_sheets - protected_sheets
+
+        return list(unlocked_sheets)
+
+
+class SheetsRepo():
+    """
+    Class to interact with Google sheets API.
+    """
+
+    SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
+
+    def __init__(self, api_key):
+        self.service = self._build_spreadsheet_service(api_key)
+
+    def fetch(self):
+        """Fetch latest sheet data from the OC signup spreadsheet."""
+        spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
+        return [
+            Sheet(
+                sheet['properties']['sheetId'],
+                sheet['properties']['title'],
+                bool(sheet.get('protectedRanges')),
+            )
+            for sheet in spreadsheet.get('sheets', [])
+        ]
+
+    def _build_spreadsheet_service(self, api_key):
+        return discovery.build('sheets', 'v4', developerKey=api_key)
+
+
+class PreviousSheetsRepo():
+    """
+    Class to read previously stored sheets information.
+    """
+
     PREV_PROTECTED_SHEETS = [
         Sheet(id=589148432123, title='BOOM!', protected=True),
         Sheet(id=589148479, title='OC1 Usage Rules', protected=True),
@@ -69,66 +121,20 @@ class OcGull():
         Sheet(id=1891545419, title='MAR 17 - MAR 23', protected=True)
     ]
 
-    def __init__(self, sheets_repo):
-        self.sheets_repo = sheets_repo
-
-    def pull(self):
-        """and create notification
-        when there are interesting changes."""
-
-        return self._get_unlocked_sheets()
-
-    def _get_unlocked_sheets(self):
-        sheets = set(self.sheets_repo.fetch())
-        prev_protected_sheets = set(self._get_prev_protected_sheets())
-        prev_protected_sheets = prev_protected_sheets & sheets
-        protected_sheets = set(sheet for sheet in sheets if sheet.protected)
-
-        unlocked_sheets = prev_protected_sheets - protected_sheets
-
-        return list(unlocked_sheets)
-
-    def _get_prev_protected_sheets(self):
+    def fetch_protected_sheets(self):
         return self.PREV_PROTECTED_SHEETS
-
-
-class SheetsRepo():
-    """
-    Class to interact with Google sheets API.
-    """
-
-    SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
-
-    def __init__(self, api_key):
-        self.service = self._build_spreadsheet_service(api_key)
-
-    def fetch(self):
-        """Fetch latest sheet data from the OC signup spreadsheet."""
-        spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
-        return [
-            Sheet(
-                sheet['properties']['sheetId'],
-                sheet['properties']['title'],
-                bool(sheet.get('protectedRanges')),
-            )
-            for sheet in spreadsheet.get('sheets', [])
-        ]
-
-    def _build_spreadsheet_service(self, api_key):
-        return discovery.build('sheets', 'v4', developerKey=api_key)
 
 
 def handleLambdaEvent(event, context):
     api_key = os.environ.get('GCP_API_KEY')
-    sheets_repo = SheetsRepo(api_key)
-    gull = OcGull(sheets_repo)
+    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo())
     return {
         'statusCode': 200,
         'body': json.dumps(gull.pull())
     }
 
+
 if __name__ == '__main__':
     api_key = sys.argv[1]
-    sheets_repo = SheetsRepo(api_key)
-    gull = OcGull(sheets_repo)
+    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo())
     print(gull.pull())
