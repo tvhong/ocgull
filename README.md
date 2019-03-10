@@ -6,5 +6,11 @@ TODO
 # Deployment
 From the project's directory, run:
 ```
-python infra/deploy.py
+python infra/deploy.py [-pip]
+```
+
+# Test
+From the project's directory, run:
+```
+python -m infra.run_tests
 ```
