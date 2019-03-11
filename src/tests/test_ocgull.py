@@ -2,7 +2,8 @@ from unittest import TestCase
 
 from mock import Mock
 
-from ocgull import OcGull, Sheet
+from ocgull import OcGull
+from sheet import Sheet
 
 
 class TestOcGull(TestCase):
