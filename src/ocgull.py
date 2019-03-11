@@ -21,7 +21,10 @@ class OcGull():
         sheets = self.sheets_repo.fetch()
         prev_sheets = self.prev_sheets_repo.fetch()
 
-        return self._get_unlocked_sheets(sheets, prev_sheets)
+        unlocked_sheets = self._get_unlocked_sheets(sheets, prev_sheets)
+        self._send_notification(unlocked_sheets)
+
+        return unlocked_sheets
 
     def _get_unlocked_sheets(self, sheets, prev_sheets):
         sheets = set(sheets)
@@ -36,6 +39,9 @@ class OcGull():
         unlocked_sheets = prev_protected_sheets - protected_sheets
 
         return list(unlocked_sheets)
+
+    def _send_notification(self, unlocked_sheets):
+        print(unlocked_sheets)
 
 
 def handleLambdaEvent(event, context):
