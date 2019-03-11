@@ -1,10 +1,12 @@
 import json
+import logging
 import os
 import sys
 
 import boto3
 from googleapiclient import discovery
 
+logger = logging.getLogger(__name__)
 
 class Sheet():
     """
@@ -107,6 +109,7 @@ class PreviousSheetsRepo():
             response = obj.get()
             data = json.loads(response['Body'].read())
         except self.s3.meta.client.exceptions.NoSuchKey:
+            logger.info("Last snapshot file does not exist yet.")
             data = []
 
         return [Sheet.from_dict(d) for d in data]
