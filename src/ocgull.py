@@ -15,6 +15,13 @@ class Sheet():
         self.title = title
         self.protected = protected
 
+    @classmethod
+    def from_dict(cls, data):
+        return Sheet(**data)
+
+    def to_dict(self):
+        return self.__dict__
+
     def __hash__(self):
         return self.id
 
@@ -138,7 +145,7 @@ def handleLambdaEvent(event, context):
     gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo())
     return {
         'statusCode': 200,
-        'body': json.dumps([sheet.title for sheet in gull.pull()])
+        'body': json.dumps([sheet.to_dict() for sheet in gull.pull()])
     }
 
 
