@@ -3,6 +3,7 @@ import os
 import sys
 
 from previous_sheets_repo import PreviousSheetsRepo
+from print_notifier import PrintNotifier
 from sheets_repo import SheetsRepo
 
 
@@ -11,9 +12,10 @@ class OcGull():
     Core logic for the notification service.
     """
 
-    def __init__(self, sheets_repo, prev_sheets_repo):
+    def __init__(self, sheets_repo, prev_sheets_repo, notifier):
         self.sheets_repo = sheets_repo
         self.prev_sheets_repo = prev_sheets_repo
+        self.notifier = notifier
 
     def pull(self):
         """Find the unlocked sheets and create notification when there's one."""
@@ -22,7 +24,7 @@ class OcGull():
         prev_sheets = self.prev_sheets_repo.fetch()
 
         unlocked_sheets = self._get_unlocked_sheets(sheets, prev_sheets)
-        self._send_notification(unlocked_sheets)
+        self.notifier.send_notification(unlocked_sheets)
 
         return unlocked_sheets
 
@@ -40,13 +42,10 @@ class OcGull():
 
         return list(unlocked_sheets)
 
-    def _send_notification(self, unlocked_sheets):
-        print(unlocked_sheets)
-
 
 def handleLambdaEvent(event, context):
     api_key = os.environ.get('GCP_API_KEY')
-    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo())
+    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo(), PrintNotifier())
     return {
         'statusCode': 200,
         'body': json.dumps([sheet.to_dict() for sheet in gull.pull()])
@@ -55,5 +54,5 @@ def handleLambdaEvent(event, context):
 
 if __name__ == '__main__':
     api_key = sys.argv[1]
-    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo())
+    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo(), PrintNotifier())
     print(gull.pull())
