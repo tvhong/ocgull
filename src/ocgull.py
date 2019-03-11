@@ -18,12 +18,17 @@ class OcGull():
     def pull(self):
         """Find the unlocked sheets and create notification when there's one."""
 
-        return self._get_unlocked_sheets()
+        sheets = self.sheets_repo.fetch()
+        prev_sheets = self.prev_sheets_repo.fetch()
 
-    def _get_unlocked_sheets(self):
-        sheets = set(self.sheets_repo.fetch())
+        return self._get_unlocked_sheets(sheets, prev_sheets)
+
+    def _get_unlocked_sheets(self, sheets, prev_sheets):
+        sheets = set(sheets)
+        prev_sheets = set(prev_sheets)
+
         prev_protected_sheets = set(
-                sheet for sheet in self.prev_sheets_repo.fetch()
+                sheet for sheet in prev_sheets
                 if sheet.protected)
         prev_protected_sheets = prev_protected_sheets & sheets
         protected_sheets = set(sheet for sheet in sheets if sheet.protected)
