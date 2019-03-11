@@ -2,6 +2,7 @@ import json
 import os
 import sys
 
+from email_notifier import EmailNotifier
 from previous_sheets_repo import PreviousSheetsRepo
 from print_notifier import PrintNotifier
 from sheets_repo import SheetsRepo
@@ -54,5 +55,5 @@ def handleLambdaEvent(event, context):
 
 if __name__ == '__main__':
     api_key = sys.argv[1]
-    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo(), PrintNotifier())
+    gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo(), EmailNotifier())
     print(gull.pull())
