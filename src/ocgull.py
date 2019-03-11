@@ -138,7 +138,7 @@ def handleLambdaEvent(event, context):
     gull = OcGull(SheetsRepo(api_key), PreviousSheetsRepo())
     return {
         'statusCode': 200,
-        'body': json.dumps(gull.pull())
+        'body': json.dumps([sheet.title for sheet in gull.pull()])
     }
 
 
