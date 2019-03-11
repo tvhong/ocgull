@@ -18,7 +18,7 @@ class PreviousSheetsRepo():
     def __init__(self):
         self.s3 = boto3.resource('s3')
 
-    def fetch_sheets(self):
+    def fetch(self):
         try:
             obj = self.s3.Object(self.BUCKET_NAME, self.LAST_SNAPSHOT)
             response = obj.get()
@@ -28,6 +28,3 @@ class PreviousSheetsRepo():
             data = []
 
         return [Sheet.from_dict(d) for d in data]
-
-    def fetch_protected_sheets(self):
-        return [sheet for sheet in self.fetch_sheets() if sheet.protected]

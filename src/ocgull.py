@@ -22,7 +22,9 @@ class OcGull():
 
     def _get_unlocked_sheets(self):
         sheets = set(self.sheets_repo.fetch())
-        prev_protected_sheets = set(self.prev_sheets_repo.fetch_protected_sheets())
+        prev_protected_sheets = set(
+                sheet for sheet in self.prev_sheets_repo.fetch()
+                if sheet.protected)
         prev_protected_sheets = prev_protected_sheets & sheets
         protected_sheets = set(sheet for sheet in sheets if sheet.protected)
 
