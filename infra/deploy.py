@@ -2,7 +2,7 @@ import subprocess
 import sys
 from os import path
 
-from .settings import BUILD_DIR, PACKAGE_DIR, SRC_DIR
+from settings import BUILD_DIR, PACKAGE_DIR, SRC_DIR
 
 
 def run_command(params, **kwargs):
