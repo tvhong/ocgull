@@ -32,7 +32,8 @@ class Sheet():
         return not self == other
 
     def __str__(self):
-        return str(self.id)
+        return "Sheet({}, \"{}\", protected={})".format(
+                self.id, self.title, self.protected)
 
     def __repr__(self):
         return str(self)
