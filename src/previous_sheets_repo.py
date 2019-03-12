@@ -5,6 +5,7 @@ import boto3
 import botocore
 
 from sheet import Sheet
+from utils import serialize_sheets
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ class PreviousSheetsRepo():
         """
         Save the last snapshot to storage.
         """
-        data = [sheet.to_dict() for sheet in sheets]
+        data = serialize_sheets(sheets)
         try:
             obj = self.s3.Object(self.BUCKET_NAME, self.LAST_SNAPSHOT_WRITE)
             obj.put(
