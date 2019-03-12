@@ -46,7 +46,7 @@ class OcGull():
 
         unlocked_sheets = prev_protected_sheets - protected_sheets
 
-        logger.info("Calculated unlocked sheets: {}", extra={"unlocked_sheets": unlocked_sheets})
+        logger.info("Calculated unlocked sheets", extra={"unlocked_sheets": unlocked_sheets})
         return list(unlocked_sheets)
 
 
