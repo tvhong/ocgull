@@ -5,23 +5,17 @@ SENDER = "dhsocbot@gmail.com"
 RECIPIENT = "shiweistg@gmail.com"
 
 CHARSET = "UTF-8"
-SUBJECT = "Amazon SES Test (SDK for Python)"
+SUBJECT = "An OC registration sheet unlocked!"
 
-BODY_TEXT = ("Amazon SES Test (Python)\r\n"
-             "This email was sent with Amazon SES using the "
-             "AWS SDK for Python (Boto)."
-            )
+BODY_TEXT = "\"{}\" OC registration sheet has been unlocked.".format("MAR 1 - MAR 2")
 BODY_HTML = """<html>
 <head></head>
 <body>
-  <h1>Amazon SES Test (SDK for Python)</h1>
-  <p>This email was sent with
-    <a href='https://aws.amazon.com/ses/'>Amazon SES</a> using the
-    <a href='https://aws.amazon.com/sdk-for-python/'>
-      AWS SDK for Python (Boto)</a>.</p>
+  <p>"{}" OC registration sheet has been unlocked.</p>
+  <p><a href='https://docs.google.com/spreadsheets/d/1TmNjLpt-nI6Mvj80l2JqltdS1A4ecn-d0AT5Zitv-bw'>2019 OC1 Schedule</a></p>
 </body>
 </html>
-            """
+            """.format("MAR 1 - MAR 2")
 
 class EmailNotifier():
     def send_notification(self, unlocked_sheets):
