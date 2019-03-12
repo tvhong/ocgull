@@ -27,6 +27,8 @@ class OcGull():
         unlocked_sheets = self._get_unlocked_sheets(sheets, prev_sheets)
         self.notifier.send_notification(unlocked_sheets)
 
+        self.prev_sheets_repo.save_snapshot(sheets)
+
         return unlocked_sheets
 
     def _get_unlocked_sheets(self, sheets, prev_sheets):
