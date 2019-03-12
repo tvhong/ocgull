@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import sys
 
@@ -7,6 +8,8 @@ from previous_sheets_repo import PreviousSheetsRepo
 from print_notifier import PrintNotifier
 from sheets_repo import SheetsRepo
 
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class OcGull():
     """
@@ -43,6 +46,7 @@ class OcGull():
 
         unlocked_sheets = prev_protected_sheets - protected_sheets
 
+        logger.info("Calculated unlocked sheets: {}", extra={"unlocked_sheets": unlocked_sheets})
         return list(unlocked_sheets)
 
 

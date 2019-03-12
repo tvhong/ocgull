@@ -1,5 +1,10 @@
+import logging
+
 import boto3
 from botocore.exceptions import ClientError
+
+logger = logging.getLogger(__name__)
+
 
 SENDER = "dhsocbot@gmail.com"
 RECIPIENT = "shiweistg@gmail.com"
@@ -50,7 +55,6 @@ class EmailNotifier():
             )
         # Display an error if something goes wrong.
         except ClientError as e:
-            print(e.response['Error']['Message'])
+            logger.error("Failed sending email: {}".format(e.response['Error']['Message']))
         else:
-            print("Email sent! Message ID:"),
-            print(response['MessageId'])
+            logger.info("Sent email notification!", extra={"MessageId": response["MessageId"]})

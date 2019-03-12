@@ -30,7 +30,10 @@ class PreviousSheetsRepo():
             logger.info("Last snapshot file does not exist yet.")
             data = []
 
-        return [Sheet.from_dict(d) for d in data]
+        sheets = [Sheet.from_dict(d) for d in data]
+        logger.info("Fetched previous sheets", extra={"sheets": sheets})
+
+        return sheets
 
     def save_snapshot(self, sheets):
         """
@@ -45,3 +48,5 @@ class PreviousSheetsRepo():
             )
         except botocore.exceptions.ClientError as e:
             logger.error("Failed saving last snapshot to S3: {}".format(e.response))
+        else:
+            logger.info("Saved snapshot.", extra={"sheets": sheets})
