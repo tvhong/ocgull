@@ -19,10 +19,9 @@ class SpreadsheetRepo():
     def fetch(self):
         """Fetch latest sheet data from the OC signup spreadsheet."""
         gspreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
-        spreadsheet = Spreadsheet(gspreadsheet)
 
-        logger.info("Fetched latest sheets.", extra={"sheets": spreadsheet.sheets})
-        return spreadsheet.sheets
+        logger.info("Fetched latest spreadsheet.", extra={"gspreadsheet": gspreadsheet})
+        return Spreadsheet(gspreadsheet)
 
     def _build_spreadsheet_service(self, api_key):
         return discovery.build('sheets', 'v4', developerKey=api_key)
