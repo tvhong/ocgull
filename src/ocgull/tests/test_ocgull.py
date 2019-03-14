@@ -18,10 +18,6 @@ class TestOcGull(TestCase):
         )
 
     def test_pull_failedFetchingSheets_bubbleError(self):
-        self.prev_spreadsheet_repo.fetch.return_value = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-        ]
         self.spreadsheet_repo.fetch.side_effect = ValueError()
 
         with self.assertRaises(ValueError):

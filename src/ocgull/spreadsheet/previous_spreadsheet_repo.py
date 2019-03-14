@@ -30,10 +30,9 @@ class PreviousSpreadsheetRepo():
             logger.info("Last snapshot file does not exist yet.")
             data = {}
 
-        spreadsheet = Spreadsheet(data)
-        logger.info("Fetched previous sheets", extra={"sheets": spreadsheet.sheets})
+        logger.info("Fetched previous sheets", extra={"gspreadsheet": data})
 
-        return spreadsheet.sheets
+        return Spreadsheet(data)
 
     def save_snapshot(self, sheets):
         """

@@ -25,9 +25,9 @@ class OcGull():
         """Find the unlocked sheets and create notification when there's one."""
 
         spreadsheet = self.spreadsheet_repo.fetch()
-        prev_sheets = self.prev_spreadsheet_repo.fetch()
+        prev_spreadsheet = self.prev_spreadsheet_repo.fetch()
 
-        unlocked_sheets = self._get_unlocked_sheets(spreadsheet.sheets, prev_sheets)
+        unlocked_sheets = self._get_unlocked_sheets(spreadsheet.sheets, prev_spreadsheet.sheets)
         self.notifier.send_notification(unlocked_sheets)
 
         self.prev_spreadsheet_repo.save_snapshot(spreadsheet.sheets)
