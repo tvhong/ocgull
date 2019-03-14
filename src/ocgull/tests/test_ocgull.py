@@ -8,11 +8,11 @@ from spreadsheet.sheet import Sheet
 
 class TestOcGull(TestCase):
     def setUp(self):
-        self.sheets_repo = Mock()
+        self.spreadsheet_repo = Mock()
         self.prev_sheets_repo = Mock()
         self.notifier = Mock()
         self.gull = OcGull(
-            self.sheets_repo,
+            self.spreadsheet_repo,
             self.prev_sheets_repo,
             self.notifier,
         )
@@ -22,7 +22,7 @@ class TestOcGull(TestCase):
             self._create_sheet(1, protected=True),
             self._create_sheet(2, protected=True),
         ]
-        self.sheets_repo.fetch.side_effect = ValueError()
+        self.spreadsheet_repo.fetch.side_effect = ValueError()
 
         with self.assertRaises(ValueError):
             self.gull.pull()

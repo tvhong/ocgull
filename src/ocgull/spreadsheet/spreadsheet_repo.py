@@ -6,7 +6,7 @@ from spreadsheet.spreadsheet import Spreadsheet
 
 logger = logging.getLogger(__name__)
 
-class SheetsRepo():
+class SpreadsheetRepo():
     """
     Class to interact with Google sheets API.
     """
