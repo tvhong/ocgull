@@ -33,10 +33,7 @@ class Sheet():
         return self.id
 
     def __eq__(self, other):
-        return hash(self) == hash(other)
-
-    def __ne__(self, other):
-        return not self == other
+        return type(self) == type(other) and hash(self) == hash(other)
 
     def __str__(self):
         return "Sheet({}, \"{}\", protected={})".format(
