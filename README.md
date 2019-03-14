@@ -12,5 +12,5 @@ python src/infra/deploy.py [-pip]
 # Test
 From the project's directory, run:
 ```
-python src/infra/run_tests.py <tests.test_ocgull>
+python src/infra/test.py <tests.test_ocgull>
 ```
