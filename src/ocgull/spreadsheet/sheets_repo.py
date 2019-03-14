@@ -2,7 +2,7 @@ import logging
 
 from googleapiclient import discovery
 
-from spreadsheet.sheet import Sheet
+from spreadsheet.spreadsheet import Spreadsheet
 
 logger = logging.getLogger(__name__)
 
@@ -18,19 +18,11 @@ class SheetsRepo():
 
     def fetch(self):
         """Fetch latest sheet data from the OC signup spreadsheet."""
-        spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
+        gspreadsheet = self.service.spreadsheets().get(spreadsheetId=self.SPREADSHEET_ID).execute()
+        spreadsheet = Spreadsheet(gspreadsheet)
 
-        sheets = [
-            Sheet(
-                sheet['properties']['sheetId'],
-                sheet['properties']['title'],
-                bool(sheet.get('protectedRanges')),
-            )
-            for sheet in spreadsheet.get('sheets', [])
-        ]
-        logger.info("Fetched latest sheets.", extra={"sheets": sheets})
-
-        return sheets
+        logger.info("Fetched latest sheets.", extra={"sheets": spreadsheet.sheets})
+        return spreadsheet.sheets
 
     def _build_spreadsheet_service(self, api_key):
         return discovery.build('sheets', 'v4', developerKey=api_key)

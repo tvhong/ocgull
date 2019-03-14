@@ -4,7 +4,7 @@ import logging
 import boto3
 import botocore
 
-from spreadsheet.sheet import Sheet
+from spreadsheet.spreadsheet import Spreadsheet
 from utils import serialize_sheets
 
 logger = logging.getLogger(__name__)
@@ -28,12 +28,12 @@ class PreviousSheetsRepo():
             data = json.loads(response["Body"].read())
         except self.s3.meta.client.exceptions.NoSuchKey:
             logger.info("Last snapshot file does not exist yet.")
-            data = []
+            data = {}
 
-        sheets = [Sheet.from_dict(d) for d in data]
-        logger.info("Fetched previous sheets", extra={"sheets": sheets})
+        spreadsheet = Spreadsheet(data)
+        logger.info("Fetched previous sheets", extra={"sheets": spreadsheet.sheets})
 
-        return sheets
+        return spreadsheet.sheets
 
     def save_snapshot(self, sheets):
         """
