@@ -31,7 +31,12 @@ class PreviousSpreadsheetRepo():
 
         logger.info("Fetched previous sheets", extra={"gspreadsheet": data})
 
-        return Spreadsheet(data)
+        try:
+            spreadsheet = Spreadsheet(data)
+        except ValueError:
+            spreadsheet = Spreadsheet({})
+
+        return spreadsheet
 
     def save_snapshot(self, spreadsheet):
         """

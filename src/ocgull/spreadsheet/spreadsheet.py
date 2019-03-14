@@ -1,7 +1,9 @@
 import json
+import logging
 
 from spreadsheet.sheet import Sheet
 
+logger = logging.getLogger(__name__)
 
 class Spreadsheet():
     """
@@ -17,6 +19,11 @@ class Spreadsheet():
         :param gspreadsheet: The Google spreadsheet data.
         :type gspreadsheet: dict()
         """
+        if type(gspreadsheet) != dict:
+            logger.error("Expect gspreadsheet to be of type dict",
+                    extra={"gspreadsheet": gspreadsheet})
+            raise ValueError("Expect gspreadsheet to be of type dict, instead get {}".format(type(gspreadsheet)))
+
         self.gspreadsheet = gspreadsheet
 
     @property
