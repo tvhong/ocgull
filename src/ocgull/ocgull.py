@@ -30,7 +30,7 @@ class OcGull():
         unlocked_sheets = self._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
         self.notifier.send_notification(unlocked_sheets)
 
-        self.prev_spreadsheet_repo.save_snapshot(spreadsheet.sheets)
+        self.prev_spreadsheet_repo.save_snapshot(spreadsheet)
 
         return unlocked_sheets
 

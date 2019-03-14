@@ -5,7 +5,6 @@ import boto3
 import botocore
 
 from spreadsheet.spreadsheet import Spreadsheet
-from utils import serialize_sheets
 
 logger = logging.getLogger(__name__)
 
@@ -34,18 +33,17 @@ class PreviousSpreadsheetRepo():
 
         return Spreadsheet(data)
 
-    def save_snapshot(self, sheets):
+    def save_snapshot(self, spreadsheet):
         """
         Save the last snapshot to storage.
         """
-        data = serialize_sheets(sheets)
         try:
             obj = self.s3.Object(self.BUCKET_NAME, self.LAST_SNAPSHOT_WRITE)
             obj.put(
-                Body=json.dumps(data),
+                Body=spreadsheet.dumps(),
                 ContentType="application/json",
             )
         except botocore.exceptions.ClientError as e:
             logger.error("Failed saving last snapshot to S3: {}".format(e.response))
         else:
-            logger.info("Saved snapshot.", extra={"sheets": sheets})
+            logger.info("Saved snapshot.")
