@@ -3,10 +3,10 @@ import logging
 import os
 import sys
 
-from email_notifier import EmailNotifier
-from previous_sheets_repo import PreviousSheetsRepo
-from print_notifier import PrintNotifier
-from sheets_repo import SheetsRepo
+from notifiers.email_notifier import EmailNotifier
+from notifiers.print_notifier import PrintNotifier
+from spreadsheet.previous_sheets_repo import PreviousSheetsRepo
+from spreadsheet.sheets_repo import SheetsRepo
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)

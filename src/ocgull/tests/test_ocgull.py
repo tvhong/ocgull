@@ -3,14 +3,19 @@ from unittest import TestCase
 from mock import Mock
 
 from ocgull import OcGull
-from sheet import Sheet
+from spreadsheet.sheet import Sheet
 
 
 class TestOcGull(TestCase):
     def setUp(self):
         self.sheets_repo = Mock()
         self.prev_sheets_repo = Mock()
-        self.gull = OcGull(self.sheets_repo, self.prev_sheets_repo)
+        self.notifier = Mock()
+        self.gull = OcGull(
+            self.sheets_repo,
+            self.prev_sheets_repo,
+            self.notifier,
+        )
 
     def test_pull_failedFetchingSheets_bubbleError(self):
         self.prev_sheets_repo.fetch.return_value = [

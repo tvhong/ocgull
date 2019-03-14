@@ -4,7 +4,7 @@ import logging
 import boto3
 import botocore
 
-from sheet import Sheet
+from spreadsheet.sheet import Sheet
 from utils import serialize_sheets
 
 logger = logging.getLogger(__name__)

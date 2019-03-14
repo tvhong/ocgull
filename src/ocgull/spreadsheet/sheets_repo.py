@@ -2,7 +2,7 @@ import logging
 
 from googleapiclient import discovery
 
-from sheet import Sheet
+from spreadsheet.sheet import Sheet
 
 logger = logging.getLogger(__name__)
 
