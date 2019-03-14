@@ -4,6 +4,7 @@ from mock import Mock
 
 from ocgull import OcGull
 from spreadsheet.sheet import Sheet
+from spreadsheet.spreadsheet import Spreadsheet
 
 
 class TestOcGull(TestCase):
@@ -24,93 +25,96 @@ class TestOcGull(TestCase):
             self.gull.pull()
 
     def test_getUnlockedSheets_oneSheetUnlocked_returnSheet(self):
-        prev_sheets = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-        ]
-        sheets = [
-            self._create_sheet(1, protected=False),
-            self._create_sheet(2, protected=True),
-        ]
+        prev_spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=True),
+            self._create_gsheet(2, protected=True),
+        ])
+        spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=False),
+            self._create_gsheet(2, protected=True),
+        ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(sheets, prev_sheets)
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
-        self.assertListEqual([self._create_sheet(1)], unlocked_sheets)
+        self.assertListEqual([Sheet(self._create_gsheet(1))], unlocked_sheets)
 
     def test_getUnlockedSheets_multipleSheetsUnlocked_returnSheets(self):
-        prev_sheets = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-            self._create_sheet(3, protected=True),
-        ]
-        sheets = [
-            self._create_sheet(1, protected=False),
-            self._create_sheet(2, protected=False),
-            self._create_sheet(3, protected=True),
-        ]
+        prev_spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=True),
+            self._create_gsheet(2, protected=True),
+            self._create_gsheet(3, protected=True),
+        ])
+        spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=False),
+            self._create_gsheet(2, protected=False),
+            self._create_gsheet(3, protected=True),
+        ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(sheets, prev_sheets)
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual(
-                [self._create_sheet(1), self._create_sheet(2)],
+                [Sheet(self._create_gsheet(1)), Sheet(self._create_gsheet(2))],
                 unlocked_sheets)
 
     def test_getUnlockedSheets_noSheetsUnlocked_returnEmptyList(self):
-        prev_sheets = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-        ]
-        sheets = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-        ]
+        prev_spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=True),
+            self._create_gsheet(2, protected=True),
+        ])
+        spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=True),
+            self._create_gsheet(2, protected=True),
+        ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(sheets, prev_sheets)
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([], unlocked_sheets)
 
     def test_getUnlockedSheets_noPrevProtectedSheets_returnEmptyList(self):
-        prev_sheets = []
-        sheets = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-        ]
+        prev_spreadsheet = self._create_spreadsheet([])
+        spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=True),
+            self._create_gsheet(2, protected=True),
+        ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(sheets, prev_sheets)
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([], unlocked_sheets)
 
     def test_getUnlockedSheets_noNewProtectedSheets_returnAllPrevSheets(self):
-        prev_sheets = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-        ]
-        sheets = [
-            self._create_sheet(1, protected=False),
-            self._create_sheet(2, protected=False),
-            self._create_sheet(3, protected=False),
-        ]
+        prev_spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=True),
+            self._create_gsheet(2, protected=True),
+        ])
+        spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=False),
+            self._create_gsheet(2, protected=False),
+            self._create_gsheet(3, protected=False),
+        ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(sheets, prev_sheets)
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual(
-                [self._create_sheet(1), self._create_sheet(2)],
+                [Sheet(self._create_gsheet(1)), Sheet(self._create_gsheet(2))],
                 unlocked_sheets)
 
     def test_getUnlockedSheets_prevSheetsNotThereAnyMore_ignoreSheet(self):
-        prev_sheets = [
-            self._create_sheet(1, protected=True),
-            self._create_sheet(2, protected=True),
-        ]
-        sheets = [
-            self._create_sheet(2, protected=False),
-        ]
+        prev_spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(1, protected=True),
+            self._create_gsheet(2, protected=True),
+        ])
+        spreadsheet = self._create_spreadsheet([
+            self._create_gsheet(2, protected=False),
+        ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(sheets, prev_sheets)
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
-        self.assertListEqual([self._create_sheet(2)], unlocked_sheets)
+        self.assertListEqual([Sheet(self._create_gsheet(2))], unlocked_sheets)
 
-    def _create_sheet(self, id, protected=False):
+    def _create_spreadsheet(self, gsheets):
+        return Spreadsheet({'sheets': gsheets})
+
+    def _create_gsheet(self, id, protected=False):
         gsheet = {
             'properties': {
                 'sheetId': id,
@@ -120,4 +124,4 @@ class TestOcGull(TestCase):
         if protected:
             gsheet['protectedRanges'] = True
 
-        return Sheet(gsheet)
+        return gsheet
