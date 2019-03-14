@@ -11,7 +11,8 @@ class SpreadsheetRepo():
     Class to interact with Google sheets API.
     """
 
-    SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
+    TEST_SPREADSHEET_ID = '1qZCXaYM_gH8vft3InZlhEXixHOfZLtipm95FvhQ_Gqo'
+    SPREADSHEET_ID = '1TmNjLpt-nI6Mvj80l2JqltdS1A4ecn-d0AT5Zitv-bw'
 
     def __init__(self, api_key):
         self.service = self._build_spreadsheet_service(api_key)
