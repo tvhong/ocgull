@@ -9,16 +9,16 @@ from spreadsheet.sheet import Sheet
 class TestOcGull(TestCase):
     def setUp(self):
         self.spreadsheet_repo = Mock()
-        self.prev_sheets_repo = Mock()
+        self.prev_spreadsheet_repo = Mock()
         self.notifier = Mock()
         self.gull = OcGull(
             self.spreadsheet_repo,
-            self.prev_sheets_repo,
+            self.prev_spreadsheet_repo,
             self.notifier,
         )
 
     def test_pull_failedFetchingSheets_bubbleError(self):
-        self.prev_sheets_repo.fetch.return_value = [
+        self.prev_spreadsheet_repo.fetch.return_value = [
             self._create_sheet(1, protected=True),
             self._create_sheet(2, protected=True),
         ]

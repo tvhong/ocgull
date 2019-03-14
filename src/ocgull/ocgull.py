@@ -5,7 +5,7 @@ import sys
 
 from notifiers.email_notifier import EmailNotifier
 from notifiers.print_notifier import PrintNotifier
-from spreadsheet.previous_sheets_repo import PreviousSheetsRepo
+from spreadsheet.previous_spreadsheet_repo import PreviousSpreadsheetRepo
 from spreadsheet.spreadsheet_repo import SpreadsheetRepo
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -16,21 +16,21 @@ class OcGull():
     Core logic for the notification service.
     """
 
-    def __init__(self, spreadsheet_repo, prev_sheets_repo, notifier):
+    def __init__(self, spreadsheet_repo, prev_spreadsheet_repo, notifier):
         self.spreadsheet_repo = spreadsheet_repo
-        self.prev_sheets_repo = prev_sheets_repo
+        self.prev_spreadsheet_repo = prev_spreadsheet_repo
         self.notifier = notifier
 
     def pull(self):
         """Find the unlocked sheets and create notification when there's one."""
 
         spreadsheet = self.spreadsheet_repo.fetch()
-        prev_sheets = self.prev_sheets_repo.fetch()
+        prev_sheets = self.prev_spreadsheet_repo.fetch()
 
         unlocked_sheets = self._get_unlocked_sheets(spreadsheet.sheets, prev_sheets)
         self.notifier.send_notification(unlocked_sheets)
 
-        self.prev_sheets_repo.save_snapshot(spreadsheet.sheets)
+        self.prev_spreadsheet_repo.save_snapshot(spreadsheet.sheets)
 
         return unlocked_sheets
 
@@ -52,7 +52,7 @@ class OcGull():
 
 def handleLambdaEvent(event, context):
     api_key = os.environ.get('GCP_API_KEY')
-    gull = OcGull(SpreadsheetRepo(api_key), PreviousSheetsRepo(), PrintNotifier())
+    gull = OcGull(SpreadsheetRepo(api_key), PreviousSpreadsheetRepo(), PrintNotifier())
     return {
         'statusCode': 200,
         'body': json.dumps([sheet.to_dict() for sheet in gull.pull()])
@@ -61,5 +61,5 @@ def handleLambdaEvent(event, context):
 
 if __name__ == '__main__':
     api_key = sys.argv[1]
-    gull = OcGull(SpreadsheetRepo(api_key), PreviousSheetsRepo(), EmailNotifier())
+    gull = OcGull(SpreadsheetRepo(api_key), PreviousSpreadsheetRepo(), EmailNotifier())
     print(gull.pull())

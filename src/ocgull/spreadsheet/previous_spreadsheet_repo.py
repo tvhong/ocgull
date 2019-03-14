@@ -10,7 +10,7 @@ from utils import serialize_sheets
 logger = logging.getLogger(__name__)
 
 
-class PreviousSheetsRepo():
+class PreviousSpreadsheetRepo():
     """
     Class to read previously stored sheets information.
     """
