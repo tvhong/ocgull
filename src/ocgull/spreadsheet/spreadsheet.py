@@ -22,12 +22,8 @@ class Spreadsheet():
     @property
     def sheets(self):
         return [
-            Sheet(
-                sheet['properties']['sheetId'],
-                sheet['properties']['title'],
-                bool(sheet.get('protectedRanges')),
-            )
-            for sheet in self.gspreadsheet.get('sheets', [])
+            Sheet(gsheet)
+            for gsheet in self.gspreadsheet.get('sheets', [])
         ]
 
     def dumps(self):
