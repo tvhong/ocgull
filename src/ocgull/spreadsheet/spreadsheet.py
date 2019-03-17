@@ -24,14 +24,21 @@ class Spreadsheet():
                     extra={"gspreadsheet": gspreadsheet})
             raise ValueError("Expect gspreadsheet to be of type dict, instead get {}".format(type(gspreadsheet)))
 
-        self.gspreadsheet = gspreadsheet
+        self._gspreadsheet = gspreadsheet
+
+    @property
+    def spreadsheet(self):
+        return self._spreadsheet
 
     @property
     def sheets(self):
         return [
             Sheet(gsheet)
-            for gsheet in self.gspreadsheet.get('sheets', [])
+            for gsheet in self._gspreadsheet.get('sheets', [])
         ]
 
     def dumps(self):
-        return json.dumps(self.gspreadsheet)
+        """
+        Dumps a JSON string of this spreadsheet
+        """
+        return json.dumps(self._gspreadsheet)
