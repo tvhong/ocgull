@@ -3,10 +3,6 @@ class Sheet():
     Data structure represents a Sheet.
     """
 
-    @classmethod
-    def from_dict(cls, data):
-        return Sheet(**data)
-
     def __init__(self, gsheet):
         """
         :param gsheet: The google sheet dictionary.
@@ -29,9 +25,6 @@ class Sheet():
     @property
     def protected(self):
         return bool(self._gsheet.get('protectedRanges'))
-
-    def to_dict(self):
-        return self.__dict__
 
     def __hash__(self):
         return self.id

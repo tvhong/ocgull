@@ -55,7 +55,7 @@ def handleLambdaEvent(event, context):
     gull = OcGull(SpreadsheetRepo(api_key), PreviousSpreadsheetRepo(), PrintNotifier())
     return {
         'statusCode': 200,
-        'body': json.dumps([sheet.to_dict() for sheet in gull.pull()])
+        'body': json.dumps([(sheet.id, sheet.title, sheet.protected) for sheet in gull.pull()])
     }
 
 
