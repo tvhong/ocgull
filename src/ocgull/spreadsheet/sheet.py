@@ -31,10 +31,13 @@ class Sheet():
 
     @property
     def protection_status(self):
-        protected = bool(self._gsheet.get('protectedRanges'))
-        if protected:
-            return ProtectionStatus.PROTECTED
-        else:
+        try:
+            protected_ranges = self._gsheet['protectedRanges']
+            if any('unprotectedRanges' in r for r in protected_ranges):
+                return ProtectionStatus.UNLOCKED
+            else:
+                return ProtectionStatus.PROTECTED
+        except KeyError:
             return ProtectionStatus.UNPROTECTED
 
     def __hash__(self):
