@@ -31,7 +31,11 @@ class Sheet():
 
     @property
     def protection_status(self):
-        return ProtectionStatus.UNPROTECTED
+        protected = bool(self._gsheet.get('protectedRanges'))
+        if protected:
+            return ProtectionStatus.PROTECTED
+        else:
+            return ProtectionStatus.UNPROTECTED
 
     def __hash__(self):
         return self.id
