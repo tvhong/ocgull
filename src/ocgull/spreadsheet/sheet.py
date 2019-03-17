@@ -1,3 +1,6 @@
+from constants import ProtectionStatus
+
+
 class Sheet():
     """
     Data structure represents a Sheet.
@@ -25,6 +28,10 @@ class Sheet():
     @property
     def protected(self):
         return bool(self._gsheet.get('protectedRanges'))
+
+    @property
+    def protection_status(self):
+        return ProtectionStatus.UNPROTECTED
 
     def __hash__(self):
         return self.id
