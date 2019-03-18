@@ -4,8 +4,7 @@ import os
 import sys
 
 from notifier import EmailNotifier, PrintNotifier
-from spreadsheet.previous_spreadsheet_repo import PreviousSpreadsheetRepo
-from spreadsheet.spreadsheet_repo import SpreadsheetRepo
+from spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
