@@ -1,4 +1,4 @@
 class ProtectionStatus():
     UNPROTECTED = 'unprotected'
-    PROTECTED = 'protected'
+    LOCKED = 'locked'
     UNLOCKED = 'unlocked'

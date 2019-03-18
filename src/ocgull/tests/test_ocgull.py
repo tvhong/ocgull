@@ -27,12 +27,12 @@ class TestOcGull(TestCase):
 
     def test_getUnlockedSheets_oneSheetUnlocked_returnSheet(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.PROTECTED),
-            (2, ProtectionStatus.PROTECTED),
+            (1, ProtectionStatus.LOCKED),
+            (2, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
-            (2, ProtectionStatus.PROTECTED),
+            (2, ProtectionStatus.LOCKED),
         ])
 
         unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
@@ -44,14 +44,14 @@ class TestOcGull(TestCase):
 
     def test_getUnlockedSheets_multipleSheetsUnlocked_returnSheets(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.PROTECTED),
-            (2, ProtectionStatus.PROTECTED),
-            (3, ProtectionStatus.PROTECTED),
+            (1, ProtectionStatus.LOCKED),
+            (2, ProtectionStatus.LOCKED),
+            (3, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.UNPROTECTED),
-            (3, ProtectionStatus.PROTECTED),
+            (3, ProtectionStatus.LOCKED),
         ])
 
         unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
@@ -64,12 +64,12 @@ class TestOcGull(TestCase):
 
     def test_getUnlockedSheets_noSheetsUnlocked_returnEmptyList(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.PROTECTED),
-            (2, ProtectionStatus.PROTECTED),
+            (1, ProtectionStatus.LOCKED),
+            (2, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.PROTECTED),
-            (2, ProtectionStatus.PROTECTED),
+            (1, ProtectionStatus.LOCKED),
+            (2, ProtectionStatus.LOCKED),
         ])
 
         unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
@@ -79,8 +79,8 @@ class TestOcGull(TestCase):
     def test_getUnlockedSheets_noPrevProtectedSheets_returnEmptyList(self):
         prev_spreadsheet = self._create_stub_spreadsheet([])
         spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.PROTECTED),
-            (2, ProtectionStatus.PROTECTED),
+            (1, ProtectionStatus.LOCKED),
+            (2, ProtectionStatus.LOCKED),
         ])
 
         unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
@@ -89,8 +89,8 @@ class TestOcGull(TestCase):
 
     def test_getUnlockedSheets_noNewProtectedSheets_returnAllPrevSheets(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.PROTECTED),
-            (2, ProtectionStatus.PROTECTED),
+            (1, ProtectionStatus.LOCKED),
+            (2, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
@@ -108,8 +108,8 @@ class TestOcGull(TestCase):
 
     def test_getUnlockedSheets_prevSheetsNotThereAnyMore_ignoreSheet(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.PROTECTED),
-            (2, ProtectionStatus.PROTECTED),
+            (1, ProtectionStatus.LOCKED),
+            (2, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
             (2, ProtectionStatus.UNPROTECTED),

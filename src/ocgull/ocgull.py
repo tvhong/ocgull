@@ -38,10 +38,10 @@ class OcGull():
         prev_sheets = set(prev_spreadsheet.sheets)
 
         prev_protected_sheets = set(sheet for sheet in prev_sheets
-                if sheet.protection == ProtectionStatus.PROTECTED)
+                if sheet.protection == ProtectionStatus.LOCKED)
         prev_protected_sheets = prev_protected_sheets & sheets
         protected_sheets = set(sheet for sheet in sheets
-                if sheet.protection == ProtectionStatus.PROTECTED)
+                if sheet.protection == ProtectionStatus.LOCKED)
 
         unlocked_sheets = prev_protected_sheets - protected_sheets
 

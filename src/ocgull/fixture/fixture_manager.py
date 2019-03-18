@@ -11,12 +11,12 @@ class FixtureManager():
     PROTECTION_TO_TITLE = {
         Fixture.BEFORE: {
             ProtectionStatus.UNPROTECTED: 'OC1 Damages',
-            ProtectionStatus.PROTECTED: 'MAR 17 - MAR 23',
+            ProtectionStatus.LOCKED: 'MAR 17 - MAR 23',
             ProtectionStatus.UNLOCKED: 'MAR 3 - MAR 9',
         },
         Fixture.AFTER: {
             ProtectionStatus.UNPROTECTED: 'OC1 Damages',
-            ProtectionStatus.PROTECTED: 'MAR 24 - MAR 30',
+            ProtectionStatus.LOCKED: 'MAR 24 - MAR 30',
             ProtectionStatus.UNLOCKED: 'MAR 17 - MAR 23',
         }
     }

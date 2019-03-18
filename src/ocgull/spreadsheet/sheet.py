@@ -32,7 +32,7 @@ class Sheet():
             if any('unprotectedRanges' in r for r in protected_ranges):
                 return ProtectionStatus.UNLOCKED
             else:
-                return ProtectionStatus.PROTECTED
+                return ProtectionStatus.LOCKED
         except KeyError:
             return ProtectionStatus.UNPROTECTED
 
