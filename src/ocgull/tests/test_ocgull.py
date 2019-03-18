@@ -25,6 +25,16 @@ class TestOcGull(TestCase):
         with self.assertRaises(ValueError):
             self.gull.pull()
 
+    def test_getUnlockedSheets_lockedSheetCreated_returnNothing(self):
+        prev_spreadsheet = self._create_stub_spreadsheet([])
+        spreadsheet = self._create_stub_spreadsheet([
+            (1, ProtectionStatus.LOCKED),
+        ])
+
+        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
+
+        self.assertListEqual([], unlocked_sheets)
+
     def test_getUnlockedSheets_unprotectedSheetCreated_returnNothing(self):
         prev_spreadsheet = self._create_stub_spreadsheet([])
         spreadsheet = self._create_stub_spreadsheet([
@@ -48,66 +58,56 @@ class TestOcGull(TestCase):
 
     def test_getUnlockedSheets_oneSheetUnlocked_returnSheet(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.LOCKED),
+            (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
+            (3, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.UNLOCKED),
-            (2, ProtectionStatus.LOCKED),
+            (1, ProtectionStatus.UNPROTECTED),
+            (2, ProtectionStatus.UNLOCKED),
+            (3, ProtectionStatus.LOCKED),
         ])
 
         unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
-        self.assertListEqual([self._create_sheet(1, ProtectionStatus.UNLOCKED)],
+        self.assertListEqual([self._create_sheet(2, ProtectionStatus.UNLOCKED)],
                 unlocked_sheets)
 
     def test_getUnlockedSheets_multipleSheetsUnlocked_returnSheets(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.LOCKED),
+            (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
             (3, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.UNLOCKED),
+            (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.UNLOCKED),
-            (3, ProtectionStatus.LOCKED),
+            (3, ProtectionStatus.UNLOCKED),
         ])
 
         unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         expected_sheets = [
-            self._create_sheet(1, ProtectionStatus.UNLOCKED),
             self._create_sheet(2, ProtectionStatus.UNLOCKED),
+            self._create_sheet(3, ProtectionStatus.UNLOCKED),
         ]
         self.assertListEqual(expected_sheets, unlocked_sheets)
 
     def test_getUnlockedSheets_noSheetsUnlocked_returnEmptyList(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.LOCKED),
+            (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
+            (3, ProtectionStatus.LOCKED),
         ])
         spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.LOCKED),
+            (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
+            (3, ProtectionStatus.LOCKED),
         ])
 
         unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([], unlocked_sheets)
-
-    def test_getUnlockedSheets_prevSheetsNotThereAnyMore_ignoreSheet(self):
-        prev_spreadsheet = self._create_stub_spreadsheet([
-            (1, ProtectionStatus.LOCKED),
-            (2, ProtectionStatus.LOCKED),
-        ])
-        spreadsheet = self._create_stub_spreadsheet([
-            (2, ProtectionStatus.UNLOCKED),
-        ])
-
-        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
-
-        self.assertListEqual([self._create_sheet(2, ProtectionStatus.UNPROTECTED)],
-                unlocked_sheets)
 
     def _create_stub_spreadsheet(self, sheets_info):
         """
