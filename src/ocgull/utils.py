@@ -4,4 +4,4 @@ from spreadsheet.spreadsheet import Spreadsheet
 
 
 def load_fixture_spreadsheet(fixture=Fixture.AFTER):
-    return Spreadsheet(FixtureManager.read_spreadsheet(fixture))
+    return Spreadsheet(FixtureManager.load_spreadsheet(fixture))

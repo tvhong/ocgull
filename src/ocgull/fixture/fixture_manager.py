@@ -8,9 +8,9 @@ FIXTURE_DIR = path.dirname(path.realpath(__file__))
 
 class FixtureManager():
     @classmethod
-    def read_spreadsheet(cls, fixture=Fixture.AFTER):
+    def load_spreadsheet(cls, fixture=Fixture.AFTER):
         """
-        Read contents of a spreadsheet fixture.
+        Load a spreadsheet fixture into memory.
 
         :param fixture: The desired fixture.
         :return: dict string represents the spreadsheet.
