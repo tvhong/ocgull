@@ -26,10 +26,6 @@ class Sheet():
         return self._gsheet['properties']['title']
 
     @property
-    def protected(self):
-        return bool(self._gsheet.get('protectedRanges'))
-
-    @property
     def protection_status(self):
         try:
             protected_ranges = self._gsheet['protectedRanges']
@@ -47,8 +43,8 @@ class Sheet():
         return type(self) == type(other) and hash(self) == hash(other)
 
     def __str__(self):
-        return "Sheet({}, \"{}\", protected={})".format(
-                self.id, self.title, self.protected)
+        return "Sheet({}, \"{}\", protection={})".format(
+                self.id, self.title, self.protection_status)
 
     def __repr__(self):
         return str(self)
