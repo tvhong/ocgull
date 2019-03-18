@@ -4,7 +4,7 @@ from unittest import TestCase
 from constants import ProtectionStatus
 from fixture.constants import Fixture
 from fixture.fixture_manager import FixtureManager
-from spreadsheet.sheet import Sheet
+from spreadsheet import Sheet
 from utils import load_fixture_spreadsheet
 
 

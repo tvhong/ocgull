@@ -3,8 +3,7 @@ from unittest import TestCase
 from mock import Mock
 
 from ocgull import OcGull
-from spreadsheet.sheet import Sheet
-from spreadsheet.spreadsheet import Spreadsheet
+from spreadsheet import Sheet, Spreadsheet
 
 
 class TestOcGull(TestCase):
