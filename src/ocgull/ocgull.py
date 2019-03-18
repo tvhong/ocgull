@@ -34,15 +34,12 @@ class OcGull():
         return unlocked_sheets
 
     def _get_unlocked_sheets(self, spreadsheet, prev_spreadsheet):
-        sheets = set(spreadsheet.sheets)
-        prev_sheets = set(prev_spreadsheet.sheets)
-
-        prev_unlocked_sheets = set(sheet for sheet in prev_sheets
+        prev_unlocked_sheets = set(sheet for sheet in prev_spreadsheet.sheets
                 if sheet.protection == ProtectionStatus.UNLOCKED)
-        unlocked_sheets = set(sheet for sheet in sheets
+        curr_unlocked_sheets = set(sheet for sheet in spreadsheet.sheets
                 if sheet.protection == ProtectionStatus.UNLOCKED)
 
-        recently_unlocked_sheets = unlocked_sheets - prev_unlocked_sheets
+        recently_unlocked_sheets = curr_unlocked_sheets - prev_unlocked_sheets
         logger.info("Recently unlocked sheets", extra={"unlocked_sheets": recently_unlocked_sheets})
         return list(recently_unlocked_sheets)
 
