@@ -1,6 +1,6 @@
 from os import path
 
-from constants import Fixture
+from fixture.constants import Fixture
 
 FIXTURE_DIR = path.dirname(path.realpath(__file__))
 

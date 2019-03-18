@@ -1,4 +1,4 @@
-from constants import Fixture
+from fixture.constants import Fixture
 from fixture.fixture_manager import FixtureManager
 from spreadsheet.spreadsheet import Spreadsheet
 

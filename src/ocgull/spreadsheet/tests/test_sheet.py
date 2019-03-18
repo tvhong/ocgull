@@ -1,7 +1,8 @@
 
 from unittest import TestCase
 
-from constants import Fixture, ProtectionStatus
+from constants import ProtectionStatus
+from fixture.constants import Fixture
 from utils import load_fixture_spreadsheet
 
 
