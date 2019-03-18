@@ -17,12 +17,12 @@ class TestSheet(TestCase):
 
     def test_protectedStatus_unprotectedSheet_unprotectedStatus(self):
         self.assertEqual(ProtectionStatus.UNPROTECTED,
-                self.unprotected_sheet.protection_status)
+                self.unprotected_sheet.protection)
 
     def test_protectedStatus_protectedSheet_protectedStatus(self):
         self.assertEqual(ProtectionStatus.PROTECTED,
-                self.protected_sheet.protection_status)
+                self.protected_sheet.protection)
 
     def test_protectedStatus_unlockedSheet_unlockedStatus(self):
         self.assertEqual(ProtectionStatus.UNLOCKED,
-                self.unlocked_sheet.protection_status)
+                self.unlocked_sheet.protection)

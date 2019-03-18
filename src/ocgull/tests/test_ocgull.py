@@ -126,7 +126,7 @@ class TestOcGull(TestCase):
         """
         Create a stub spreadsheet given the sheets info.
 
-        :param sheets_info: A list of (id, protection_status) tuples.
+        :param sheets_info: A list of (id, protection) tuples.
         :type sheets_info: [(int, ProtectionStatus)]
         """
         sheets = []

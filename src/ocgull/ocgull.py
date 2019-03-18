@@ -3,9 +3,9 @@ import logging
 import os
 import sys
 
+from constants import ProtectionStatus
 from notifier import EmailNotifier, PrintNotifier
 from spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
-from constants import ProtectionStatus
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -38,10 +38,10 @@ class OcGull():
         prev_sheets = set(prev_spreadsheet.sheets)
 
         prev_protected_sheets = set(sheet for sheet in prev_sheets
-                if sheet.protection_status == ProtectionStatus.PROTECTED)
+                if sheet.protection == ProtectionStatus.PROTECTED)
         prev_protected_sheets = prev_protected_sheets & sheets
         protected_sheets = set(sheet for sheet in sheets
-                if sheet.protection_status == ProtectionStatus.PROTECTED)
+                if sheet.protection == ProtectionStatus.PROTECTED)
 
         unlocked_sheets = prev_protected_sheets - protected_sheets
 
@@ -54,7 +54,7 @@ def handleLambdaEvent(event, context):
     gull = OcGull(SpreadsheetRepo(api_key), PreviousSpreadsheetRepo(), PrintNotifier())
     return {
         'statusCode': 200,
-        'body': json.dumps([(sheet.id, sheet.title, sheet.protection_status) for sheet in gull.pull()])
+        'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
     }
 
 

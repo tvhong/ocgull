@@ -26,7 +26,7 @@ class Sheet():
         return self._gsheet['properties']['title']
 
     @property
-    def protection_status(self):
+    def protection(self):
         try:
             protected_ranges = self._gsheet['protectedRanges']
             if any('unprotectedRanges' in r for r in protected_ranges):
@@ -44,7 +44,7 @@ class Sheet():
 
     def __str__(self):
         return "Sheet({}, \"{}\", protection={})".format(
-                self.id, self.title, self.protection_status)
+                self.id, self.title, self.protection)
 
     def __repr__(self):
         return str(self)
