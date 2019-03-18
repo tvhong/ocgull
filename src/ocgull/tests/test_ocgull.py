@@ -129,11 +129,12 @@ class TestOcGull(TestCase):
         :param sheets_info: A list of (id, protection) tuples.
         :type sheets_info: [(int, ProtectionStatus)]
         """
-        sheets = []
-        for sheet_info in sheets_info:
-            gsheet = FixtureManager.load_sheet(sheet_info[1])
-            gsheet['properties']['sheetId'] = sheet_info[0]
-            gsheet['properties']['title'] = 'Sheet {}'.format(sheet_info[0])
-            sheets.append(Sheet(gsheet))
+        sheets = [self._create_sheet(si[0], si[1]) for si in sheets_info]
 
         return Mock(spec=Spreadsheet, sheets=sheets)
+
+    def _create_sheet(self, id, protection):
+        gsheet = FixtureManager.load_sheet(protection)
+        gsheet['properties']['sheetId'] = id
+        gsheet['properties']['title'] = 'Sheet {}'.format(id)
+        return Sheet(gsheet)
