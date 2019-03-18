@@ -37,16 +37,14 @@ class OcGull():
         sheets = set(spreadsheet.sheets)
         prev_sheets = set(prev_spreadsheet.sheets)
 
-        prev_protected_sheets = set(sheet for sheet in prev_sheets
-                if sheet.protection == ProtectionStatus.LOCKED)
-        prev_protected_sheets = prev_protected_sheets & sheets
-        protected_sheets = set(sheet for sheet in sheets
-                if sheet.protection == ProtectionStatus.LOCKED)
+        prev_unlocked_sheets = set(sheet for sheet in prev_sheets
+                if sheet.protection == ProtectionStatus.UNLOCKED)
+        unlocked_sheets = set(sheet for sheet in sheets
+                if sheet.protection == ProtectionStatus.UNLOCKED)
 
-        unlocked_sheets = prev_protected_sheets - protected_sheets
-
-        logger.info("Calculated unlocked sheets", extra={"unlocked_sheets": unlocked_sheets})
-        return list(unlocked_sheets)
+        recently_unlocked_sheets = unlocked_sheets - prev_unlocked_sheets
+        logger.info("Recently unlocked sheets", extra={"unlocked_sheets": recently_unlocked_sheets})
+        return list(recently_unlocked_sheets)
 
 
 def handleLambdaEvent(event, context):

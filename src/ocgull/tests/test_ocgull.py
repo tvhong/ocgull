@@ -25,6 +25,27 @@ class TestOcGull(TestCase):
         with self.assertRaises(ValueError):
             self.gull.pull()
 
+    def test_getUnlockedSheets_unprotectedSheetCreated_returnNothing(self):
+        prev_spreadsheet = self._create_stub_spreadsheet([])
+        spreadsheet = self._create_stub_spreadsheet([
+            (1, ProtectionStatus.UNPROTECTED),
+        ])
+
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+
+        self.assertListEqual([], unlocked_sheets)
+
+    def test_getUnlockedSheets_unlockedSheetCreated_returnSheet(self):
+        prev_spreadsheet = self._create_stub_spreadsheet([])
+        spreadsheet = self._create_stub_spreadsheet([
+            (1, ProtectionStatus.UNLOCKED),
+        ])
+
+        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+
+        self.assertListEqual([self._create_sheet(1, ProtectionStatus.UNLOCKED)],
+                unlocked_sheets)
+
     def test_getUnlockedSheets_oneSheetUnlocked_returnSheet(self):
         prev_spreadsheet = self._create_stub_spreadsheet([
             (1, ProtectionStatus.LOCKED),
