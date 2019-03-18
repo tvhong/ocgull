@@ -1,3 +1,4 @@
+import json
 from os import path
 
 from fixture.constants import Fixture
@@ -12,10 +13,10 @@ class FixtureManager():
         Read contents of a spreadsheet fixture.
 
         :param fixture: The desired fixture.
-        :return: string represents the spreadsheet.
+        :return: dict string represents the spreadsheet.
         """
         file_path = path.join(FIXTURE_DIR, fixture)
         with open(file_path) as f:
-            data = f.read()
+            json_str = f.read()
 
-        return data
+        return json.loads(json_str)
