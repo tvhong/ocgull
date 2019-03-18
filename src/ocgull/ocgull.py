@@ -5,6 +5,7 @@ import sys
 
 from notifier import EmailNotifier, PrintNotifier
 from spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
+from constants import ProtectionStatus
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -36,11 +37,11 @@ class OcGull():
         sheets = set(spreadsheet.sheets)
         prev_sheets = set(prev_spreadsheet.sheets)
 
-        prev_protected_sheets = set(
-                sheet for sheet in prev_sheets
-                if sheet.protected)
+        prev_protected_sheets = set(sheet for sheet in prev_sheets
+                if sheet.protection_status == ProtectionStatus.PROTECTED)
         prev_protected_sheets = prev_protected_sheets & sheets
-        protected_sheets = set(sheet for sheet in sheets if sheet.protected)
+        protected_sheets = set(sheet for sheet in sheets
+                if sheet.protection_status == ProtectionStatus.PROTECTED)
 
         unlocked_sheets = prev_protected_sheets - protected_sheets
 
