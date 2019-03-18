@@ -3,8 +3,7 @@ import logging
 import os
 import sys
 
-from notifier.email_notifier import EmailNotifier
-from notifier.print_notifier import PrintNotifier
+from notifier import EmailNotifier, PrintNotifier
 from spreadsheet.previous_spreadsheet_repo import PreviousSpreadsheetRepo
 from spreadsheet.spreadsheet_repo import SpreadsheetRepo
 
