@@ -39,9 +39,9 @@ class OcGull():
         curr_unlocked_sheets = set(sheet for sheet in spreadsheet.sheets
                 if sheet.protection == ProtectionStatus.UNLOCKED)
 
-        recently_unlocked_sheets = curr_unlocked_sheets - prev_unlocked_sheets
-        logger.info("Recently unlocked sheets", extra={"unlocked_sheets": recently_unlocked_sheets})
-        return list(recently_unlocked_sheets)
+        result = curr_unlocked_sheets - prev_unlocked_sheets
+        logger.info("Recently unlocked sheets", extra={"unlocked_sheets": result})
+        return list(result)
 
 
 def handleLambdaEvent(event, context):
