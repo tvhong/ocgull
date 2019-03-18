@@ -12,20 +12,21 @@ RECIPIENT = "shiweistg@gmail.com"
 CHARSET = "UTF-8"
 SUBJECT = "An OC registration sheet unlocked!"
 
-BODY_TEXT = "\"{}\" OC registration sheet has been unlocked.".format("MAR 1 - MAR 2")
-BODY_HTML = """<html>
+BODY_TEXT_TEMPLATE = "OC registration sheet(s) has been unlocked: {sheet_titles}."
+BODY_HTML_TEMPLATE = """<html>
 <head></head>
 <body>
-  <p>"{}" OC registration sheet has been unlocked.</p>
+  <p>OC registration sheet(s) has been unlocked: {sheet_titles}.</p>
   <p><a href='https://docs.google.com/spreadsheets/d/1TmNjLpt-nI6Mvj80l2JqltdS1A4ecn-d0AT5Zitv-bw'>2019 OC1 Schedule</a></p>
 </body>
 </html>
-            """.format("MAR 1 - MAR 2")
+            """
 
 class EmailNotifier():
     def send_notification(self, unlocked_sheets):
         client = boto3.client('ses')
 
+        sheet_titles = ', '.join([s.title for s in unlocked_sheets])
         try:
             #Provide the contents of the email.
             response = client.send_email(
@@ -38,11 +39,11 @@ class EmailNotifier():
                     'Body': {
                         'Html': {
                             'Charset': CHARSET,
-                            'Data': BODY_HTML,
+                            'Data': BODY_HTML_TEMPLATE.format(sheet_titles=sheet_titles),
                         },
                         'Text': {
                             'Charset': CHARSET,
-                            'Data': BODY_TEXT,
+                            'Data': BODY_TEXT_TEMPLATE.format(sheet_titles=sheet_titles),
                         },
                     },
                     'Subject': {
