@@ -1,5 +1,5 @@
+from fixture import FixtureManager
 from fixture.constants import Fixture
-from fixture.fixture_manager import FixtureManager
 from spreadsheet import Spreadsheet
 
 
