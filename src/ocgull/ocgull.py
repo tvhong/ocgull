@@ -26,14 +26,14 @@ class OcGull():
         spreadsheet = self.spreadsheet_repo.fetch()
         prev_spreadsheet = self.prev_spreadsheet_repo.fetch()
 
-        unlocked_sheets = self._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        unlocked_sheets = self._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
         self.notifier.send_notification(unlocked_sheets)
 
         self.prev_spreadsheet_repo.save_snapshot(spreadsheet)
 
         return unlocked_sheets
 
-    def _get_unlocked_sheets(self, spreadsheet, prev_spreadsheet):
+    def _get_recently_unlocked_sheets(self, spreadsheet, prev_spreadsheet):
         prev_unlocked_sheets = set(sheet for sheet in prev_spreadsheet.sheets
                 if sheet.protection == ProtectionStatus.UNLOCKED)
         curr_unlocked_sheets = set(sheet for sheet in spreadsheet.sheets

@@ -31,7 +31,7 @@ class TestOcGull(TestCase):
             (1, ProtectionStatus.UNPROTECTED),
         ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([], unlocked_sheets)
 
@@ -41,7 +41,7 @@ class TestOcGull(TestCase):
             (1, ProtectionStatus.UNLOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([self._create_sheet(1, ProtectionStatus.UNLOCKED)],
                 unlocked_sheets)
@@ -56,7 +56,7 @@ class TestOcGull(TestCase):
             (2, ProtectionStatus.LOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([self._create_sheet(1, ProtectionStatus.UNLOCKED)],
                 unlocked_sheets)
@@ -73,7 +73,7 @@ class TestOcGull(TestCase):
             (3, ProtectionStatus.LOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         expected_sheets = [
             self._create_sheet(1, ProtectionStatus.UNLOCKED),
@@ -91,7 +91,7 @@ class TestOcGull(TestCase):
             (2, ProtectionStatus.LOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([], unlocked_sheets)
 
@@ -104,7 +104,7 @@ class TestOcGull(TestCase):
             (2, ProtectionStatus.UNLOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
 
         self.assertListEqual([self._create_sheet(2, ProtectionStatus.UNPROTECTED)],
                 unlocked_sheets)
