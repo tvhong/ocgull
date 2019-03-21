@@ -20,6 +20,7 @@ class FixtureManager():
             ProtectionStatus.UNLOCKED: 'MAR 17 - MAR 23',
         }
     }
+    RECENTLY_UNLOCKED_SHEET = 'MAR 17 - MAR 23'
 
     @classmethod
     def load_spreadsheet(cls, fixture=Fixture.AFTER):
@@ -47,3 +48,12 @@ class FixtureManager():
         gspreadsheet = cls.load_spreadsheet(fixture)
         return next(s for s in gspreadsheet['sheets']
                 if s['properties']['title'] == cls.PROTECTION_TO_TITLE[fixture][protection])
+
+    @classmethod
+    def load_recently_unlocked_sheets(cls):
+        """
+        Load the latest unlocked sheets between BEFORE and AFTER.
+        """
+        gspreadsheet = cls.load_spreadsheet(Fixture.AFTER)
+        return [s for s in gspreadsheet['sheets']
+                if s['properties']['title'] == cls.RECENTLY_UNLOCKED_SHEET]
