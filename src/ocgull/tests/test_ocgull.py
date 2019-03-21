@@ -113,6 +113,22 @@ class TestOcGull(TestCase):
 
         self.notifier.send_notification.assert_not_called()
 
+    def test_pull_noSheetsUnlocked_dontSaveSnapshot(self):
+        self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
+            (1, ProtectionStatus.UNPROTECTED),
+            (2, ProtectionStatus.LOCKED),
+            (3, ProtectionStatus.LOCKED),
+        ])
+        self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
+            (1, ProtectionStatus.UNPROTECTED),
+            (2, ProtectionStatus.LOCKED),
+            (3, ProtectionStatus.LOCKED),
+        ])
+
+        self.gull.pull()
+
+        self.prev_spreadsheet_repo.save_snapshot.assert_not_called()
+
     def test_pull_sheetUnlockedInFixture_sendNotificationForSheet(self):
         self.prev_spreadsheet_repo.fetch.return_value = Spreadsheet(FixtureManager.load_spreadsheet(Fixture.BEFORE))
         self.spreadsheet_repo.fetch.return_value = Spreadsheet(FixtureManager.load_spreadsheet(Fixture.AFTER))
