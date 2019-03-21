@@ -14,15 +14,20 @@ class PreviousSpreadsheetRepo():
     Class to read previously stored sheets information.
     """
     BUCKET_NAME = "ocgull-snapshots"
-    LAST_SNAPSHOT_READ = "last-snapshot.json"
-    LAST_SNAPSHOT_WRITE = "last-snapshot-fake.json"
 
-    def __init__(self):
+    def __init__(self, config):
+        """
+        :param config: The configuration for this repo.
+        :type config: RepoConfig.
+        """
+        self.snapshot_read_filename = config.get_snapshot_read_filename()
+        self.snapshot_write_filename = config.get_snapshot_write_filename()
+
         self.s3 = boto3.resource("s3")
 
     def fetch(self):
         try:
-            obj = self.s3.Object(self.BUCKET_NAME, self.LAST_SNAPSHOT_READ)
+            obj = self.s3.Object(self.BUCKET_NAME, self.snapshot_read_filename)
             response = obj.get()
             data = json.loads(response["Body"].read())
         except self.s3.meta.client.exceptions.NoSuchKey:
@@ -43,7 +48,7 @@ class PreviousSpreadsheetRepo():
         Save the last snapshot to storage.
         """
         try:
-            obj = self.s3.Object(self.BUCKET_NAME, self.LAST_SNAPSHOT_WRITE)
+            obj = self.s3.Object(self.BUCKET_NAME, self.snapshot_write_filename)
             obj.put(
                 Body=spreadsheet.dumps(),
                 ContentType="application/json",

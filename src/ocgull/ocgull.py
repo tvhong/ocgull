@@ -48,7 +48,7 @@ class OcGull():
 def handleLambdaEvent(event, context):
     repoconfig = RepoConfig(Environment.PROD)
     api_key = os.environ.get('GCP_API_KEY')
-    gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(), PrintNotifier())
+    gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(repoconfig), PrintNotifier())
     return {
         'statusCode': 200,
         'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
@@ -60,6 +60,6 @@ if __name__ == '__main__':
 
     repoconfig = RepoConfig(Environment.DEV)
     api_key = sys.argv[1]
-    gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(),
+    gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(repoconfig),
             EmailNotifier())
     print(gull.pull())
