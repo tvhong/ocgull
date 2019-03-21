@@ -3,6 +3,8 @@ import logging
 import boto3
 from botocore.exceptions import ClientError
 
+from notifier.base import Notifier
+
 logger = logging.getLogger(__name__)
 
 
@@ -22,7 +24,7 @@ BODY_HTML_TEMPLATE = """<html>
 </html>
             """
 
-class EmailNotifier():
+class EmailNotifier(Notifier):
     def send_notification(self, unlocked_sheets):
         client = boto3.client('ses')
 
