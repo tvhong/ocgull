@@ -4,6 +4,7 @@ from mock import Mock
 
 from constants import ProtectionStatus
 from fixture import FixtureManager
+from fixture.constants import Fixture
 from notifier import Notifier
 from ocgull import OcGull
 from spreadsheet import Sheet, Spreadsheet
@@ -111,6 +112,15 @@ class TestOcGull(TestCase):
         self.gull.pull()
 
         self.notifier.send_notification.assert_not_called()
+
+    def test_pull_sheetUnlockedInFixture_sendNotificationForSheet(self):
+        self.prev_spreadsheet_repo.fetch.return_value = Spreadsheet(FixtureManager.load_spreadsheet(Fixture.BEFORE))
+        self.spreadsheet_repo.fetch.return_value = Spreadsheet(FixtureManager.load_spreadsheet(Fixture.AFTER))
+
+        self.gull.pull()
+
+        expected_sheets = list(map(Sheet, FixtureManager.load_recently_unlocked_sheets()))
+        self.notifier.send_notification.assert_called_once_with(expected_sheets)
 
     def _create_stub_spreadsheet(self, sheets_info):
         """
