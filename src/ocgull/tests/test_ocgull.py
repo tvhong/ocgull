@@ -4,15 +4,17 @@ from mock import Mock
 
 from constants import ProtectionStatus
 from fixture import FixtureManager
+from notifier import Notifier
 from ocgull import OcGull
 from spreadsheet import Sheet, Spreadsheet
+from spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
 
 
 class TestOcGull(TestCase):
     def setUp(self):
-        self.spreadsheet_repo = Mock()
-        self.prev_spreadsheet_repo = Mock()
-        self.notifier = Mock()
+        self.spreadsheet_repo = Mock(spec=SpreadsheetRepo)
+        self.prev_spreadsheet_repo = Mock(spec=PreviousSpreadsheetRepo)
+        self.notifier = Mock(spec=Notifier)
         self.gull = OcGull(
             self.spreadsheet_repo,
             self.prev_spreadsheet_repo,
