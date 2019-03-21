@@ -5,7 +5,9 @@ import sys
 
 from constants import ProtectionStatus
 from notifier import EmailNotifier, PrintNotifier
-from spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
+from spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
+                              SpreadsheetRepo)
+from spreadsheet.repo.constants import Environment
 
 logger = logging.getLogger(__name__)
 
@@ -44,8 +46,9 @@ class OcGull():
 
 
 def handleLambdaEvent(event, context):
+    repoconfig = RepoConfig(Environment.PROD)
     api_key = os.environ.get('GCP_API_KEY')
-    gull = OcGull(SpreadsheetRepo(api_key), PreviousSpreadsheetRepo(), PrintNotifier())
+    gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(), PrintNotifier())
     return {
         'statusCode': 200,
         'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
@@ -55,6 +58,8 @@ def handleLambdaEvent(event, context):
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
+    repoconfig = RepoConfig(Environment.DEV)
     api_key = sys.argv[1]
-    gull = OcGull(SpreadsheetRepo(api_key), PreviousSpreadsheetRepo(), EmailNotifier())
+    gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(),
+            EmailNotifier())
     print(gull.pull())
