@@ -7,7 +7,6 @@ from constants import ProtectionStatus
 from notifier import EmailNotifier, PrintNotifier
 from spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class OcGull():
@@ -54,6 +53,8 @@ def handleLambdaEvent(event, context):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
     api_key = sys.argv[1]
     gull = OcGull(SpreadsheetRepo(api_key), PreviousSpreadsheetRepo(), EmailNotifier())
     print(gull.pull())
