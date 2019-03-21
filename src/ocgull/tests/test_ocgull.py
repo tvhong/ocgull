@@ -28,13 +28,10 @@ class TestOcGull(TestCase):
             self.gull.pull()
 
     def test_pull_lockedSheetCreated_dontNotify(self):
-        prev_spreadsheet = self._create_stub_spreadsheet([])
-        spreadsheet = self._create_stub_spreadsheet([
+        self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([])
+        self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.LOCKED),
         ])
-
-        self.prev_spreadsheet_repo.fetch.return_value = prev_spreadsheet
-        self.spreadsheet_repo.fetch.return_value = spreadsheet
 
         self.gull.pull()
 
