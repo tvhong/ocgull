@@ -25,15 +25,18 @@ class TestOcGull(TestCase):
         with self.assertRaises(ValueError):
             self.gull.pull()
 
-    def test_getUnlockedSheets_lockedSheetCreated_returnNothing(self):
+    def test_pull_lockedSheetCreated_dontNotify(self):
         prev_spreadsheet = self._create_stub_spreadsheet([])
         spreadsheet = self._create_stub_spreadsheet([
             (1, ProtectionStatus.LOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        self.prev_spreadsheet_repo.fetch.return_value = prev_spreadsheet
+        self.spreadsheet_repo.fetch.return_value = spreadsheet
 
-        self.assertListEqual([], unlocked_sheets)
+        self.gull.pull()
+
+        self.notifier.send_notification.assert_not_called()
 
     def test_getUnlockedSheets_unprotectedSheetCreated_returnNothing(self):
         prev_spreadsheet = self._create_stub_spreadsheet([])
