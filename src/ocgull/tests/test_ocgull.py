@@ -27,7 +27,7 @@ class TestOcGull(TestCase):
         with self.assertRaises(ValueError):
             self.gull.pull()
 
-    def test_pull_lockedSheetCreated_dontNotify(self):
+    def test_pull_lockedSheetCreated_noNotification(self):
         self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([])
         self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.LOCKED),
@@ -37,79 +37,80 @@ class TestOcGull(TestCase):
 
         self.notifier.send_notification.assert_not_called()
 
-    def test_getUnlockedSheets_unprotectedSheetCreated_returnNothing(self):
-        prev_spreadsheet = self._create_stub_spreadsheet([])
-        spreadsheet = self._create_stub_spreadsheet([
+    def test_pull_unprotectedSheetCreated_noNotification(self):
+        self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([])
+        self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
         ])
 
-        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        self.gull.pull()
 
-        self.assertListEqual([], unlocked_sheets)
+        self.notifier.send_notification.assert_not_called()
 
-    def test_getUnlockedSheets_unlockedSheetCreated_returnSheet(self):
-        prev_spreadsheet = self._create_stub_spreadsheet([])
-        spreadsheet = self._create_stub_spreadsheet([
+    def test_pull_unlockedSheetCreated_sendNotificationForSheet(self):
+        self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([])
+        self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNLOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        self.gull.pull()
 
-        self.assertListEqual([self._create_sheet(1, ProtectionStatus.UNLOCKED)],
-                unlocked_sheets)
+        self.notifier.send_notification.assert_called_once_with([
+            self._create_sheet(1, ProtectionStatus.UNLOCKED),
+        ])
 
-    def test_getUnlockedSheets_oneSheetUnlocked_returnSheet(self):
-        prev_spreadsheet = self._create_stub_spreadsheet([
+    def test_pull_oneSheetUnlocked_sendNotificationForSheet(self):
+        self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
             (3, ProtectionStatus.LOCKED),
         ])
-        spreadsheet = self._create_stub_spreadsheet([
+        self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.UNLOCKED),
             (3, ProtectionStatus.LOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        self.gull.pull()
 
-        self.assertListEqual([self._create_sheet(2, ProtectionStatus.UNLOCKED)],
-                unlocked_sheets)
+        self.notifier.send_notification.assert_called_once_with([
+            self._create_sheet(2, ProtectionStatus.UNLOCKED),
+        ])
 
-    def test_getUnlockedSheets_multipleSheetsUnlocked_returnSheets(self):
-        prev_spreadsheet = self._create_stub_spreadsheet([
+    def test_pull_multipleSheetsUnlocked_sendNotificationForSheets(self):
+        self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
             (3, ProtectionStatus.LOCKED),
         ])
-        spreadsheet = self._create_stub_spreadsheet([
+        self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.UNLOCKED),
             (3, ProtectionStatus.UNLOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        self.gull.pull()
 
-        expected_sheets = [
+        self.notifier.send_notification.assert_called_once_with([
             self._create_sheet(2, ProtectionStatus.UNLOCKED),
             self._create_sheet(3, ProtectionStatus.UNLOCKED),
-        ]
-        self.assertListEqual(expected_sheets, unlocked_sheets)
+        ])
 
-    def test_getUnlockedSheets_noSheetsUnlocked_returnEmptyList(self):
-        prev_spreadsheet = self._create_stub_spreadsheet([
+    def test_pull_noSheetsUnlocked_noNotification(self):
+        self.prev_spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
             (3, ProtectionStatus.LOCKED),
         ])
-        spreadsheet = self._create_stub_spreadsheet([
+        self.spreadsheet_repo.fetch.return_value = self._create_stub_spreadsheet([
             (1, ProtectionStatus.UNPROTECTED),
             (2, ProtectionStatus.LOCKED),
             (3, ProtectionStatus.LOCKED),
         ])
 
-        unlocked_sheets = self.gull._get_recently_unlocked_sheets(spreadsheet, prev_spreadsheet)
+        self.gull.pull()
 
-        self.assertListEqual([], unlocked_sheets)
+        self.notifier.send_notification.assert_not_called()
 
     def _create_stub_spreadsheet(self, sheets_info):
         """
