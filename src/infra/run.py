@@ -3,11 +3,11 @@ import logging
 import os
 import sys
 
-from infra.constants import Environment
 from ocgull.notifier import EmailNotifier, PrintNotifier
 from ocgull.ocgull import OcGull
 from ocgull.spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
                                      SpreadsheetRepo)
+from ocgull.spreadsheet.repo.constants import DataSource
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +26,9 @@ def _factory(env, notify_via_email):
     gcp_api_key = os.environ.get('GCP_API_KEY')
 
     if env == 'prod':
-        repoconfig = RepoConfig(Environment.PROD)
+        repoconfig = RepoConfig(DataSource.PROD)
     elif env == 'dev':
-        repoconfig = RepoConfig(Environment.DEV)
+        repoconfig = RepoConfig(DataSource.DEV)
     else:
         raise ValueError("Unknown environment: {}".format(env))
 
@@ -43,7 +43,7 @@ def _factory(env, notify_via_email):
 def handleLambdaEvent(event, context):
     _config_root_logger()
 
-    repoconfig = RepoConfig(Environment.PROD)
+    repoconfig = RepoConfig(DataSource.PROD)
     api_key = os.environ.get('GCP_API_KEY')
     gull = OcGull(SpreadsheetRepo(repoconfig, api_key),
             PreviousSpreadsheetRepo(repoconfig), PrintNotifier())
