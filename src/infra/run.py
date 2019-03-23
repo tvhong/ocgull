@@ -20,7 +20,11 @@ def _config_root_logger():
 
 def handleLambdaEvent(event, context):
     _config_root_logger()
-    gull = OcGullFactory.create(DataSource.PROD, notify_via_email=False)
+
+    datasource = DataSource.PROD if event['prod'] == True else DataSource.TEST
+    notify_via_email = event['email'] == True
+    gull = OcGullFactory.create(datasource, notify_via_email)
+
     return {
         'statusCode': 200,
         'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
@@ -33,4 +37,5 @@ if __name__ == '__main__':
     datasource = DataSource.PROD if '--prod' in sys.argv else DataSource.TEST
     notify_via_email = '--email' in sys.argv
     gull = OcGullFactory.create(datasource, notify_via_email)
+
     gull.pull()
