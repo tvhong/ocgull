@@ -24,7 +24,7 @@ def build(pip_download):
     run_command(['zip', '-q', '-r', function_zip_file, '.'], cwd=PACKAGE_DIR)
 
     print("Adding src to zip...")
-    run_command(['zip', '-g', '-r', function_zip_file, 'ocgull/', '-i', '*.py'], cwd=SRC_DIR)
+    run_command(['zip', '-g', '-r', function_zip_file, '.', '-i', '*.py'], cwd=SRC_DIR)
 
 def deploy():
     print("Deploying to AWS lambda...")
