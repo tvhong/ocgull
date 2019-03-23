@@ -12,16 +12,24 @@ from ocgull.spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
 logger = logging.getLogger(__name__)
 
 
-def handleLambdaEvent(event, context):
+def _config_root_logger():
+    """
+    AWS lambda calls logging.basicConfig themselves. We want to override this.
+    """
+    root = logging.getLogger()
+    for handler in root.handlers or []:
+        root.removeHandler(handler)
+
     logging.basicConfig(level=logging.INFO)
+
+def handleLambdaEvent(event, context):
+    _config_root_logger()
 
     repoconfig = RepoConfig(Environment.PROD)
     api_key = os.environ.get('GCP_API_KEY')
-    print("Blah")
-    logger.warn("POOP!")
-    logger.error("POOP! ERror")
     gull = OcGull(SpreadsheetRepo(repoconfig, api_key),
             PreviousSpreadsheetRepo(repoconfig), PrintNotifier())
+
     return {
         'statusCode': 200,
         'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
