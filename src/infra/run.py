@@ -35,12 +35,7 @@ def _factory(datasource, notify_via_email):
 
 def handleLambdaEvent(event, context):
     _config_root_logger()
-
-    repoconfig = RepoConfig(DataSource.PROD)
-    api_key = os.environ.get('GCP_API_KEY')
-    gull = OcGull(SpreadsheetRepo(repoconfig, api_key),
-            PreviousSpreadsheetRepo(repoconfig), PrintNotifier())
-
+    gull = _factory(DataSource.PROD, notify_via_email=False)
     return {
         'statusCode': 200,
         'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
