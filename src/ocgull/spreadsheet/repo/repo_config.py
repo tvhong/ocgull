@@ -15,16 +15,16 @@ class RepoConfig():
         DataSource.PROD: 'snapshot.json',
     }
 
-    def __init__(self, env):
-        assert(env in (DataSource.PROD, DataSource.TEST))
+    def __init__(self, datasource):
+        assert(datasource in (DataSource.PROD, DataSource.TEST))
 
-        self.env = env
+        self.datasource = datasource
 
     def get_gspreadsheet_id(self):
-        return self._SPREADSHEET_ID_MAP[self.env]
+        return self._SPREADSHEET_ID_MAP[self.datasource]
 
     def get_snapshot_read_filename(self):
-        return self._SNAPSHOT_READ[self.env]
+        return self._SNAPSHOT_READ[self.datasource]
 
     def get_snapshot_write_filename(self):
-        return self._SNAPSHOT_WRITE[self.env]
+        return self._SNAPSHOT_WRITE[self.datasource]
