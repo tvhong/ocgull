@@ -28,3 +28,9 @@ class RepoConfig():
 
     def get_snapshot_write_filename(self):
         return self._SNAPSHOT_WRITE[self.datasource]
+
+    def __eq__(self, other):
+        return type(self) == type(other) and self.datasource == other.datasource
+
+    def __hash__(self):
+        return hash(self.datasource)
