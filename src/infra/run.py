@@ -40,7 +40,7 @@ if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
     repoconfig = RepoConfig(Environment.DEV)
-    api_key = sys.argv[1]
+    api_key = os.environ.get('GCP_API_KEY')
     gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(repoconfig),
             EmailNotifier())
     print(gull.pull())
