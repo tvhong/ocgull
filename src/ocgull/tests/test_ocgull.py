@@ -6,7 +6,7 @@ from ocgull.constants import ProtectionStatus
 from ocgull.fixture import FixtureManager
 from ocgull.fixture.constants import Fixture
 from ocgull.notifier import Notifier
-from ocgull.ocgull_runner import OcGull
+from ocgull.ocgull import OcGull
 from ocgull.spreadsheet import Sheet, Spreadsheet
 from ocgull.spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
 

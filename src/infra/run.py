@@ -4,7 +4,7 @@ import os
 import sys
 
 from ocgull.notifier import EmailNotifier, PrintNotifier
-from ocgull.ocgull_runner import OcGull
+from ocgull.ocgull import OcGull
 from ocgull.spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
                                      SpreadsheetRepo)
 from ocgull.spreadsheet.repo.constants import Environment
