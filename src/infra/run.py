@@ -3,11 +3,11 @@ import logging
 import os
 import sys
 
+from infra.constants import Environment
 from ocgull.notifier import EmailNotifier, PrintNotifier
 from ocgull.ocgull import OcGull
 from ocgull.spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
                                      SpreadsheetRepo)
-from ocgull.spreadsheet.repo.constants import Environment
 
 logger = logging.getLogger(__name__)
 

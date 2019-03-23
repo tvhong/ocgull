@@ -1,4 +1,4 @@
-from ocgull.spreadsheet.repo.constants import Environment
+from infra.constants import Environment
 
 
 class RepoConfig():
