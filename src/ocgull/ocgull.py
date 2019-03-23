@@ -34,5 +34,5 @@ class OcGull():
                 if sheet.protection == ProtectionStatus.UNLOCKED)
 
         result = curr_unlocked_sheets - prev_unlocked_sheets
-        logger.info("Recently unlocked sheets", extra={"unlocked_sheets": result})
+        logger.info("Recently unlocked sheets: {}.".format([s.title for s in result]))
         return list(result)
