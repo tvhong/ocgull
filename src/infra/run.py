@@ -2,8 +2,7 @@ import json
 import logging
 import sys
 
-from ocgull import OcGullFactory
-from ocgull.spreadsheet.repo.constants import DataSource
+from ocgull import DataSource, OcGullFactory
 
 logger = logging.getLogger(__name__)
 
