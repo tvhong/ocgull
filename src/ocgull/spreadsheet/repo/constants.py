@@ -1,3 +1,3 @@
 class DataSource():
-    DEV = 'dev'
+    TEST = 'test'
     PROD = 'prod'

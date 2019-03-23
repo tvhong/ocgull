@@ -28,7 +28,7 @@ def _factory(env, notify_via_email):
     if env == 'prod':
         repoconfig = RepoConfig(DataSource.PROD)
     elif env == 'dev':
-        repoconfig = RepoConfig(DataSource.DEV)
+        repoconfig = RepoConfig(DataSource.TEST)
     else:
         raise ValueError("Unknown environment: {}".format(env))
 
