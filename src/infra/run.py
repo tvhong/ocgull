@@ -33,4 +33,4 @@ if __name__ == '__main__':
     datasource = DataSource.PROD if '--prod' in sys.argv else DataSource.TEST
     notify_via_email = '--email' in sys.argv
     gull = OcGullFactory.create(datasource, notify_via_email)
-    print(gull.pull())
+    gull.pull()
