@@ -30,5 +30,7 @@ def handleLambdaEvent(event, context):
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-    gull = OcGullFactory.create(DataSource.TEST, notify_via_email=True)
+    datasource = DataSource.PROD if '--prod' in sys.argv else DataSource.TEST
+    notify_via_email = '--email' in sys.argv
+    gull = OcGullFactory.create(datasource, notify_via_email)
     print(gull.pull())
