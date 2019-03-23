@@ -22,6 +22,24 @@ def _config_root_logger():
 
     logging.basicConfig(level=logging.INFO)
 
+def _factory(env, notify_via_email):
+    gcp_api_key = os.environ.get('GCP_API_KEY')
+
+    if env == 'prod':
+        repoconfig = RepoConfig(Environment.PROD)
+    elif env == 'dev':
+        repoconfig = RepoConfig(Environment.DEV)
+    else:
+        raise ValueError("Unknown environment: {}".format(env))
+
+    notifier = EmailNotifier() if notify_via_email else PrintNotifier()
+
+    gull = OcGull(SpreadsheetRepo(repoconfig, gcp_api_key),
+            PreviousSpreadsheetRepo(repoconfig), notifier)
+
+    return gull
+
+
 def handleLambdaEvent(event, context):
     _config_root_logger()
 
@@ -39,8 +57,5 @@ def handleLambdaEvent(event, context):
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-    repoconfig = RepoConfig(Environment.DEV)
-    api_key = os.environ.get('GCP_API_KEY')
-    gull = OcGull(SpreadsheetRepo(repoconfig, api_key), PreviousSpreadsheetRepo(repoconfig),
-            EmailNotifier())
+    gull = _factory('dev', notify_via_email=True)
     print(gull.pull())
