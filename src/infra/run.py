@@ -1,12 +1,8 @@
 import json
 import logging
-import os
 import sys
 
-from ocgull.notifier import EmailNotifier, PrintNotifier
-from ocgull.ocgull import OcGull
-from ocgull.spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
-                                     SpreadsheetRepo)
+from ocgull import OcGullFactory
 from ocgull.spreadsheet.repo.constants import DataSource
 
 logger = logging.getLogger(__name__)
@@ -22,20 +18,10 @@ def _config_root_logger():
 
     logging.basicConfig(level=logging.INFO)
 
-def _factory(datasource, notify_via_email):
-    repoconfig = RepoConfig(datasource)
-    gcp_api_key = os.environ.get('GCP_API_KEY')
-    notifier = EmailNotifier() if notify_via_email else PrintNotifier()
-
-    gull = OcGull(SpreadsheetRepo(repoconfig, gcp_api_key),
-            PreviousSpreadsheetRepo(repoconfig), notifier)
-
-    return gull
-
 
 def handleLambdaEvent(event, context):
     _config_root_logger()
-    gull = _factory(DataSource.PROD, notify_via_email=False)
+    gull = OcGullFactory.create(DataSource.PROD, notify_via_email=False)
     return {
         'statusCode': 200,
         'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
@@ -45,5 +31,5 @@ def handleLambdaEvent(event, context):
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-    gull = _factory(DataSource.TEST, notify_via_email=True)
+    gull = OcGullFactory.create(DataSource.TEST, notify_via_email=True)
     print(gull.pull())
