@@ -2,13 +2,13 @@ from unittest import TestCase
 
 from mock import Mock
 
-from constants import ProtectionStatus
-from fixture import FixtureManager
-from fixture.constants import Fixture
-from notifier import Notifier
-from ocgull import OcGull
-from spreadsheet import Sheet, Spreadsheet
-from spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
+from ocgull.constants import ProtectionStatus
+from ocgull.fixture import FixtureManager
+from ocgull.fixture.constants import Fixture
+from ocgull.notifier import Notifier
+from ocgull.ocgull_runner import OcGull
+from ocgull.spreadsheet import Sheet, Spreadsheet
+from ocgull.spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
 
 
 class TestOcGull(TestCase):

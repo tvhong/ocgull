@@ -1,6 +1,6 @@
-from fixture import FixtureManager
-from fixture.constants import Fixture
-from spreadsheet import Spreadsheet
+from ocgull.fixture import FixtureManager
+from ocgull.fixture.constants import Fixture
+from ocgull.spreadsheet import Spreadsheet
 
 
 def load_fixture_spreadsheet(fixture=Fixture.AFTER):

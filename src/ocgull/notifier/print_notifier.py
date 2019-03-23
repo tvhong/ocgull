@@ -1,4 +1,4 @@
-from notifier.base import Notifier
+from ocgull.notifier.base import Notifier
 
 
 class PrintNotifier(Notifier):

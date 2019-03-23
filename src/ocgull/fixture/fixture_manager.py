@@ -1,8 +1,8 @@
 import json
 from os import path
 
-from constants import ProtectionStatus
-from fixture.constants import Fixture
+from ocgull.constants import ProtectionStatus
+from ocgull.fixture.constants import Fixture
 
 FIXTURE_DIR = path.dirname(path.realpath(__file__))
 

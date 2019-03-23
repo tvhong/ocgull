@@ -2,7 +2,7 @@ import logging
 
 from googleapiclient import discovery
 
-from spreadsheet.spreadsheet import Spreadsheet
+from ocgull.spreadsheet.spreadsheet import Spreadsheet
 
 logger = logging.getLogger(__name__)
 

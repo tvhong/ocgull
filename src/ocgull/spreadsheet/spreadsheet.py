@@ -1,7 +1,7 @@
 import json
 import logging
 
-from spreadsheet.sheet import Sheet
+from ocgull.spreadsheet.sheet import Sheet
 
 logger = logging.getLogger(__name__)
 

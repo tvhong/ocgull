@@ -1,11 +1,11 @@
 
 from unittest import TestCase
 
-from constants import ProtectionStatus
-from fixture import FixtureManager
-from fixture.constants import Fixture
-from spreadsheet import Sheet
-from utils import load_fixture_spreadsheet
+from ocgull.constants import ProtectionStatus
+from ocgull.fixture import FixtureManager
+from ocgull.fixture.constants import Fixture
+from ocgull.spreadsheet import Sheet
+from ocgull.utils import load_fixture_spreadsheet
 
 
 class TestSheet(TestCase):

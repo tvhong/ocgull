@@ -1,4 +1,4 @@
-from constants import ProtectionStatus
+from ocgull.constants import ProtectionStatus
 
 
 class Sheet():

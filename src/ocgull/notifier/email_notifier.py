@@ -3,7 +3,7 @@ import logging
 import boto3
 from botocore.exceptions import ClientError
 
-from notifier.base import Notifier
+from ocgull.notifier.base import Notifier
 
 logger = logging.getLogger(__name__)
 

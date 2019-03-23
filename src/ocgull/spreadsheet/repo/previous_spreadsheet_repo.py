@@ -4,7 +4,7 @@ import logging
 import boto3
 import botocore
 
-from spreadsheet.spreadsheet import Spreadsheet
+from ocgull.spreadsheet.spreadsheet import Spreadsheet
 
 logger = logging.getLogger(__name__)
 
