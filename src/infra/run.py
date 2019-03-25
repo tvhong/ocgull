@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import sys
 
 from ocgull import DataSource, OcgullFactory
@@ -21,9 +22,11 @@ def _config_root_logger():
 def handleLambdaEvent(event, context):
     _config_root_logger()
 
+    gcp_api_key = os.environ.get('GCP_API_KEY')
     datasource = DataSource.PROD if event['prod'] == True else DataSource.TEST
     notify_via_email = event['email'] == True
-    gull = OcgullFactory.create(datasource, notify_via_email)
+
+    gull = OcgullFactory.create(gcp_api_key, datasource, notify_via_email)
 
     return {
         'statusCode': 200,
@@ -34,8 +37,9 @@ def handleLambdaEvent(event, context):
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
+    gcp_api_key = os.environ.get('GCP_API_KEY')
     datasource = DataSource.PROD if '--prod' in sys.argv else DataSource.TEST
     notify_via_email = '--email' in sys.argv
-    gull = OcgullFactory.create(datasource, notify_via_email)
+    gull = OcgullFactory.create(gcp_api_key, datasource, notify_via_email)
 
     gull.pull()
