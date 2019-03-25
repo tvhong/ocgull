@@ -23,13 +23,21 @@ def _config_root_logger_for_aws():
 
 
 def handle_aws_lambda_event(event, context):
+    """
+    Handler for aws lambda.
+
+    Expected event object schema:
+    {
+        'prod': bool, // Whether to read PROD data?
+        'emails': string, // Comma-separated email addresses, empty string will print to stdout.
+    }
+    """
+
     _config_root_logger_for_aws()
 
     gcp_api_key = os.environ['GCP_API_KEY']
     datasource = DataSource.PROD if event['prod'] == True else DataSource.TEST
-    notify_via_email = event['email'] == True
-    email_addresses = (os.environ['OCGULL_EMAILS'].split(',') if notify_via_email
-            else None)
+    email_addresses = event['emails'].split(',')
 
     gull = OcgullFactory.create(gcp_api_key, datasource, email_addresses)
 
