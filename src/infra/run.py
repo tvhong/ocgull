@@ -19,7 +19,7 @@ def _config_root_logger_for_aws():
     logging.basicConfig(level=logging.INFO)
 
 
-def handleLambdaEvent(event, context):
+def handle_aws_lambda_event(event, context):
     _config_root_logger_for_aws()
 
     gcp_api_key = os.environ['GCP_API_KEY']
