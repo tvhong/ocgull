@@ -8,7 +8,7 @@ from ocgull import DataSource, OcgullFactory
 logger = logging.getLogger(__name__)
 
 
-def _config_root_logger():
+def _config_root_logger_for_aws():
     """
     AWS lambda calls logging.basicConfig themselves. We want to override this.
     """
@@ -20,7 +20,7 @@ def _config_root_logger():
 
 
 def handleLambdaEvent(event, context):
-    _config_root_logger()
+    _config_root_logger_for_aws()
 
     gcp_api_key = os.environ['GCP_API_KEY']
     datasource = DataSource.PROD if event['prod'] == True else DataSource.TEST
