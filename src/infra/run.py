@@ -47,7 +47,11 @@ def handle_aws_lambda_event(event, context):
     }
 
 
-if __name__ == '__main__':
+def handle_script_invocation():
+    """
+    Handle local script invocation.
+    """
+
     HELP_TEXT = 'Usage: run.py [-p] [-e <email1>,<email2>]'
 
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -74,3 +78,6 @@ if __name__ == '__main__':
     gull = OcgullFactory.create(gcp_api_key, datasource, email_addresses)
 
     gull.pull()
+
+if __name__ == '__main__':
+    handle_script_invocation()
