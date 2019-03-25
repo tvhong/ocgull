@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import getopt
 import json
 import logging
 import os
@@ -39,14 +40,29 @@ def handle_aws_lambda_event(event, context):
 
 
 if __name__ == '__main__':
+    HELP_TEXT = 'Usage: run.py [-p] [-e <email1>,<email2>]'
+
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-    gcp_api_key = os.environ['GCP_API_KEY']
-    datasource = DataSource.PROD if '--prod' in sys.argv else DataSource.TEST
-    notify_via_email = '--email' in sys.argv
-    email_addresses = (os.environ['OCGULL_EMAILS'].split(',') if notify_via_email
-            else None)
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'hpe:', ['prod', 'emails='])
+    except getopt.GetoptError as err:
+        print(err)
+        print(HELP_TEXT)
+        sys.exit(2)
 
+    datasource = DataSource.TEST
+    email_addresses = []
+    for option, argument in opts:
+        if option in ('-h', '--help'):
+            print(HELP_TEXT)
+            sys.exit()
+        elif option in ('-p', '--prod'):
+            datasource = DataSource.PROD
+        elif option in ('-e', '--emails'):
+            email_addresses = argument.split(',')
+
+    gcp_api_key = os.environ['GCP_API_KEY']
     gull = OcgullFactory.create(gcp_api_key, datasource, email_addresses)
 
     gull.pull()
