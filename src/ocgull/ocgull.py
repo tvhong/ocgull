@@ -4,7 +4,7 @@ from ocgull.constants import ProtectionStatus
 
 logger = logging.getLogger(__name__)
 
-class OcGull():
+class Ocgull():
     """
     Core logic for the notification service.
     """

@@ -6,7 +6,7 @@ from ocgull.constants import ProtectionStatus
 from ocgull.fixture import FixtureManager
 from ocgull.fixture.constants import Fixture
 from ocgull.notifier import Notifier
-from ocgull.ocgull import OcGull
+from ocgull.ocgull import Ocgull
 from ocgull.spreadsheet import Sheet, Spreadsheet
 from ocgull.spreadsheet.repo import PreviousSpreadsheetRepo, SpreadsheetRepo
 
@@ -16,7 +16,7 @@ class TestOcGull(TestCase):
         self.spreadsheet_repo = Mock(spec=SpreadsheetRepo)
         self.prev_spreadsheet_repo = Mock(spec=PreviousSpreadsheetRepo)
         self.notifier = Mock(spec=Notifier)
-        self.gull = OcGull(
+        self.gull = Ocgull(
             self.spreadsheet_repo,
             self.prev_spreadsheet_repo,
             self.notifier,
