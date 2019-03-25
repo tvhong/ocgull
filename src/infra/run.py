@@ -25,8 +25,10 @@ def handleLambdaEvent(event, context):
     gcp_api_key = os.environ.get('GCP_API_KEY')
     datasource = DataSource.PROD if event['prod'] == True else DataSource.TEST
     notify_via_email = event['email'] == True
+    email_addresses = (os.environ['OCGULL_EMAILS'].split(',') if notify_via_email
+            else None)
 
-    gull = OcgullFactory.create(gcp_api_key, datasource, notify_via_email)
+    gull = OcgullFactory.create(gcp_api_key, datasource, email_addresses)
 
     return {
         'statusCode': 200,
@@ -40,6 +42,9 @@ if __name__ == '__main__':
     gcp_api_key = os.environ.get('GCP_API_KEY')
     datasource = DataSource.PROD if '--prod' in sys.argv else DataSource.TEST
     notify_via_email = '--email' in sys.argv
-    gull = OcgullFactory.create(gcp_api_key, datasource, notify_via_email)
+    email_addresses = (os.environ['OCGULL_EMAILS'].split(',') if notify_via_email
+            else None)
+
+    gull = OcgullFactory.create(gcp_api_key, datasource, email_addresses)
 
     gull.pull()

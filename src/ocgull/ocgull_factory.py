@@ -9,19 +9,19 @@ logger = logging.getLogger(__name__)
 
 class OcgullFactory():
     @classmethod
-    def create(cls, gcp_api_key, datasource, notify_via_email):
+    def create(cls, gcp_api_key, datasource, email_addresses):
         """
         Create an Ocgull isinstance.
 
         :param gcp_api_key: The Google Cloud Platform API key.
         :param datasource: The datasource to read from.
-        :param notify_via_email: Whether the created instance should send email
-                notifications.
+        :param email_addresses: A list of email addresses to get nofication. If
+                there's no addresses, result will be printed to stdout.
         """
-        logger.info("Creating Ocgull with args: {}".format((datasource, notify_via_email)))
+        logger.info("Creating Ocgull with args: {}".format((datasource, email_addresses)))
 
         repoconfig = RepoConfig(datasource)
-        notifier = EmailNotifier() if notify_via_email else PrintNotifier()
+        notifier = EmailNotifier() if email_addresses else PrintNotifier()
 
         gull = Ocgull(SpreadsheetRepo(repoconfig, gcp_api_key),
                 PreviousSpreadsheetRepo(repoconfig), notifier)
