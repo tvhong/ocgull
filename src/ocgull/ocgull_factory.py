@@ -8,7 +8,7 @@ from ocgull.spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
 
 logger = logging.getLogger(__name__)
 
-class OcGullFactory():
+class OcgullFactory():
     @classmethod
     def create(cls, datasource, notify_via_email):
         """

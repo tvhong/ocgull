@@ -2,7 +2,7 @@ import json
 import logging
 import sys
 
-from ocgull import DataSource, OcGullFactory
+from ocgull import DataSource, OcgullFactory
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ def handleLambdaEvent(event, context):
 
     datasource = DataSource.PROD if event['prod'] == True else DataSource.TEST
     notify_via_email = event['email'] == True
-    gull = OcGullFactory.create(datasource, notify_via_email)
+    gull = OcgullFactory.create(datasource, notify_via_email)
 
     return {
         'statusCode': 200,
@@ -36,6 +36,6 @@ if __name__ == '__main__':
 
     datasource = DataSource.PROD if '--prod' in sys.argv else DataSource.TEST
     notify_via_email = '--email' in sys.argv
-    gull = OcGullFactory.create(datasource, notify_via_email)
+    gull = OcgullFactory.create(datasource, notify_via_email)
 
     gull.pull()
