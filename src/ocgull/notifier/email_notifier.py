@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 SENDER = "dhsocbot@gmail.com"
-RECIPIENT = "shiweistg@gmail.com"
 
 CHARSET = "UTF-8"
 SUBJECT = "An OC registration sheet unlocked!"
@@ -25,6 +24,11 @@ BODY_HTML_TEMPLATE = """<html>
             """
 
 class EmailNotifier(Notifier):
+    def __init__(self, email_addresses):
+        assert len(email_addresses)
+
+        self.email_addresses = email_addresses
+
     def send_notification(self, unlocked_sheets):
         client = boto3.client('ses')
 
@@ -33,9 +37,7 @@ class EmailNotifier(Notifier):
             #Provide the contents of the email.
             response = client.send_email(
                 Destination={
-                    'ToAddresses': [
-                        RECIPIENT,
-                    ],
+                    'ToAddresses': self.email_addresses,
                 },
                 Message={
                     'Body': {

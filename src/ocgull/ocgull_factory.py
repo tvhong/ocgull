@@ -21,7 +21,7 @@ class OcgullFactory():
         logger.info("Creating Ocgull with args: {}".format((datasource, email_addresses)))
 
         repoconfig = RepoConfig(datasource)
-        notifier = EmailNotifier() if email_addresses else PrintNotifier()
+        notifier = EmailNotifier(email_addresses) if email_addresses else PrintNotifier()
 
         gull = Ocgull(SpreadsheetRepo(repoconfig, gcp_api_key),
                 PreviousSpreadsheetRepo(repoconfig), notifier)
