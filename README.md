@@ -4,13 +4,13 @@ Ocgull: Gulls that patrol the dock for available Ocs
 
 Quickstart:
 ---
-### Clone repo:
+### Clone repo
 ```
 $ mkdir -p ~/workspace/ && cd ~/workspace
 $ git clone https://github.com/tvhong/ocgull.git
 ```
 
-### Setup virtual environment:
+### Setup virtual environment
 
 The below are my usual setup, which uses `pyenv` and `pyenv-virtualenv` wrapper.
 Feel free to use your favorite tool for creating virtual env.
@@ -38,10 +38,10 @@ the project directory. For `pyenv`, this can be achieved with:
 $ cd ~/workspace/ocgull && pyenv local ocgull
 ```
 
-### Obtain a Google Cloud Platform API key:
+### Obtain a Google Cloud Platform API key
 See https://developers.google.com/sheets/api/guides/authorizing#APIKey
 
-### Run the program on local:
+### Run the program on local
 Assuming you're in project repo and activated virtual env, this should fetch
 the data from a test spreadsheet and print out the result in stdout.
 ```bash
