@@ -43,7 +43,7 @@ def handle_aws_lambda_event(event, context):
 
     return {
         'statusCode': 200,
-        'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.pull()])
+        'body': json.dumps([(sheet.id, sheet.title, sheet.protection) for sheet in gull.patrol()])
     }
 
 
@@ -77,7 +77,8 @@ def handle_script_invocation():
     gcp_api_key = os.environ['GCP_API_KEY']
     gull = OcgullFactory.create(gcp_api_key, datasource, email_addresses)
 
-    gull.pull()
+    gull.patrol()
+
 
 if __name__ == '__main__':
     handle_script_invocation()

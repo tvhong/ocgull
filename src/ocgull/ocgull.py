@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 class Ocgull():
     """
-    Core logic for the notification service.
+    Gull that's responsible for patrolling the dock for available Oc1s.
     """
 
     def __init__(self, spreadsheet_repo, prev_spreadsheet_repo, notifier):
@@ -14,8 +14,8 @@ class Ocgull():
         self.prev_spreadsheet_repo = prev_spreadsheet_repo
         self.notifier = notifier
 
-    def pull(self):
-        """Find the unlocked sheets and create notification when there's one."""
+    def patrol(self):
+        """Patrol the dock and caw caw if potential OCs are found."""
 
         spreadsheet = self.spreadsheet_repo.fetch()
         prev_spreadsheet = self.prev_spreadsheet_repo.fetch()
