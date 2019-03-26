@@ -1,7 +1,6 @@
 Ocgull: Gulls that patrol the dock for available Ocs
 ===
 
-
 Quickstart:
 ---
 ### Clone repo
@@ -49,6 +48,25 @@ $ GCP_API_KEY=<api-key-obtained-above> ./src/infra/run.py
 ```
 
 Run `./src/infra/run.py -h` for more options.
+
+Note: email sending relies on Amazon SES (Simple Email Service). So, to send
+emails, it is required that awscli is installed and credentials are setup.
+See https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
+
+Infrastructure
+---
+![text](docs/infrastructure_design.png)
+
+This program runs on AWS lambda, which is periodically triggered by CloudWatch Events.
+
+Inputs:
+- Google Sheet API - fetch the latest spreadsheet.
+- Amazon S3 - fetch the previous spreadsheet snapshot.
+
+Outputs:
+- Amazon S3 - store the latest spreadsheet snapshot.
+- Amazon SES - service for sending emails.
+- Amazon CloudWatch Logs - logging service for debugging.
 
 Deployment
 ---
