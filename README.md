@@ -50,14 +50,16 @@ $ GCP_API_KEY=<api-key-obtained-above> ./src/infra/run.py
 
 Run `./src/infra/run.py -h` for more options.
 
-## Deployment
-From the project's directory, run:
-```
-python src/infra/deploy.py [-pip]
+Deployment
+---
+From project root, run:
+```bash
+./src/infra/deploy.py [-pip] # by default we don't reinstall pip
 ```
 
-## Test
-From the project's directory, run:
-```
-python src/infra/test.py <tests.test_ocgull>
+Test
+---
+From project root, run:
+```bash
+./src/infra/test.py [path.to.specific.test]
 ```
