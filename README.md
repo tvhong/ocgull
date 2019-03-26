@@ -1,4 +1,4 @@
-Ocgull: Gulls that patrol the dock for available Ocs
+Ocgull: Gulls that patrol DZ for available Ocs
 ===
 
 Quickstart:
