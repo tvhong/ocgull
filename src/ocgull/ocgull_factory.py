@@ -2,8 +2,8 @@ import logging
 
 from ocgull.notifier import EmailNotifier, PrintNotifier
 from ocgull.ocgull import Ocgull
-from ocgull.spreadsheet.repo import (PreviousSpreadsheetRepo, RepoConfig,
-                                     SpreadsheetRepo)
+from ocgull.spreadsheet.repo import (
+    PreviousSpreadsheetRepo, RepoConfig, SpreadsheetRepo)
 
 logger = logging.getLogger(__name__)
 
