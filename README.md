@@ -1,7 +1,27 @@
-Ocgull: Gulls that patrol DZ for available Ocs
+Ocgull: Gulls that patrol Dragon Zone dock for available outrigger boats
 ===
 
-Quickstart:
+Overview
+---
+This is a toy project I made to notify my outrigger team when the Dragon Zone community center opens the boat sign up sheet for the week.
+It tracks a Google sheet and sends an email notification when the sign up tab is unlocked.
+
+Infrastructure
+---
+![text](docs/infrastructure_design.png)
+
+This program runs on AWS lambda, which is periodically triggered by CloudWatch Events.
+
+Inputs:
+- Google Sheet API - fetch the latest spreadsheet.
+- Amazon S3 - fetch the previous spreadsheet snapshot.
+
+Outputs:
+- Amazon S3 - store the latest spreadsheet snapshot.
+- Amazon SES - service for sending emails.
+- Amazon CloudWatch Logs - logging service for debugging.
+
+Quickstart
 ---
 ### Clone repo
 ```
@@ -52,21 +72,6 @@ Run `./src/infra/run.py -h` for more options.
 Note: email sending relies on Amazon SES (Simple Email Service). So, to send
 emails, it is required that awscli is installed and credentials are setup.
 See https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-
-Infrastructure
----
-![text](docs/infrastructure_design.png)
-
-This program runs on AWS lambda, which is periodically triggered by CloudWatch Events.
-
-Inputs:
-- Google Sheet API - fetch the latest spreadsheet.
-- Amazon S3 - fetch the previous spreadsheet snapshot.
-
-Outputs:
-- Amazon S3 - store the latest spreadsheet snapshot.
-- Amazon SES - service for sending emails.
-- Amazon CloudWatch Logs - logging service for debugging.
 
 Deployment
 ---
